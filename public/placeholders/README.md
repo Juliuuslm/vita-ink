@@ -16,11 +16,26 @@ Esta carpeta debe contener las imágenes del sitio. Por ahora, coloca imágenes 
 - `about-2.jpg` (400px width - ratio 3:4)
 - `about-3.jpg` (608px width - ratio 16:10 o similar, más ancha)
 
-## Services (próxima fase)
-- `service-temporary.jpg`
-- `service-minimal.jpg`
-- `service-lettering.jpg`
-- `service-full.jpg`
+## Services Section ✓
+### Temporary Tattoos
+- `service-temporary-main.jpg` (600px - imagen principal)
+- `service-temporary-b.jpg` (120px - decorativa)
+- `service-temporary-c.jpg` (120px - decorativa)
+
+### Minimal Tattoos
+- `service-minimal-main.jpg` (600px - imagen principal)
+- `service-minimal-b.jpg` (120px - decorativa)
+- `service-minimal-c.jpg` (120px - decorativa)
+
+### Lettering Tattoos
+- `service-lettering-main.jpg` (600px - imagen principal)
+- `service-lettering-b.jpg` (120px - decorativa)
+- `service-lettering-c.jpg` (120px - decorativa)
+
+### Full Coverage Tattoo
+- `service-full-main.jpg` (600px - imagen principal)
+- `service-full-b.jpg` (120px - decorativa)
+- `service-full-c.jpg` (120px - decorativa)
 
 ## Artists (próxima fase)
 - `team-alex.jpg`
