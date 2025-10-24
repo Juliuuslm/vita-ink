@@ -99,13 +99,11 @@ export default function CTA() {
               className="stroke-marquee-track absolute inset-0 flex flex-col items-center justify-start"
             >
               {/* Primera lista */}
-              <div className="stroke-text-item">Tattoo</div>
-              <div className="stroke-text-item">Studio</div>
-              <div className="stroke-text-item">Tattoo</div>
+              <div className="stroke-text-item">TATTOO</div>
+              <div className="stroke-text-item">STUDIO</div>
               {/* Segunda lista duplicada para loop seamless */}
-              <div className="stroke-text-item">Tattoo</div>
-              <div className="stroke-text-item">Studio</div>
-              <div className="stroke-text-item">Tattoo</div>
+              <div className="stroke-text-item">TATTOO</div>
+              <div className="stroke-text-item">STUDIO</div>
             </div>
           </div>
 
