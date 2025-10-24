@@ -1,0 +1,67 @@
+---
+/**
+ * Header/Navbar con navegación fija
+ * Incluye logo, links de navegación, botón CTA y menú móvil
+ */
+import { NAV_LINKS } from '../../lib/constants';
+import Button from '../ui/Button.astro';
+import MobileMenu from './MobileMenu';
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg-dark)]/95 backdrop-blur-md border-b border-white/5 transition-all duration-300"
+>
+  <nav class="container-custom py-4 lg:py-5">
+    <div class="flex items-center justify-between">
+      {/* Logo */}
+      <a
+        href="#home"
+        class="text-2xl lg:text-3xl font-bold text-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold-hover)] transition-colors duration-300"
+      >
+        Soulmark
+      </a>
+
+      {/* Navegación Desktop */}
+      <div class="hidden lg:flex items-center gap-8">
+        {NAV_LINKS.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium text-white/80 hover:text-[var(--color-accent-gold)] transition-colors duration-300"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      {/* CTA Button Desktop */}
+      <div class="hidden lg:block">
+        <Button variant="primary" href="#contact">
+          Book Now
+        </Button>
+      </div>
+
+      {/* Menú Móvil */}
+      <MobileMenu client:load />
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Efecto de scroll para cambiar el estilo del header
+  const header = document.getElementById('header');
+
+  if (header) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('shadow-lg');
+        header.classList.remove('bg-[var(--color-bg-dark)]/95');
+        header.classList.add('bg-[var(--color-bg-dark)]');
+      } else {
+        header.classList.remove('shadow-lg');
+        header.classList.remove('bg-[var(--color-bg-dark)]');
+        header.classList.add('bg-[var(--color-bg-dark)]/95');
+      }
+    });
+  }
+</script>

@@ -3,17 +3,18 @@
  * Página principal del sitio Soulmark Tattoo Studio
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Hero from '../components/sections/Hero';
 ---
 
 <BaseLayout>
-  <main class="min-h-screen flex items-center justify-center">
-    <div class="text-center">
-      <h1 class="text-6xl font-bold text-[var(--color-accent-gold)] mb-4">
-        Soulmark
-      </h1>
-      <p class="text-xl text-[var(--color-text-secondary)]">
-        Estructura base lista. Iniciando desarrollo por fases...
-      </p>
-    </div>
-  </main>
+  <Header />
+  <Hero client:load />
+
+  {/* Las siguientes secciones se agregarán en las próximas fases */}
+  <div class="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)]">
+    <p class="text-2xl text-[var(--color-text-dark)] font-bold">
+      Secciones siguientes en desarrollo...
+    </p>
+  </div>
 </BaseLayout>

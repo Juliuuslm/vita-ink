@@ -1,0 +1,41 @@
+---
+/**
+ * Componente Button reutilizable
+ * Variantes: primary, secondary, alternate
+ */
+import { cn } from '../../lib/utils';
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'alternate';
+  href?: string;
+  class?: string;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const {
+  variant = 'primary',
+  href,
+  class: className,
+  type = 'button'
+} = Astro.props;
+
+const baseStyles = 'inline-block px-8 py-4 text-base font-semibold rounded-full transition-all duration-300 hover:-translate-y-1 active:translate-y-0';
+
+const variantStyles = {
+  primary: 'bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] hover:bg-[var(--color-accent-gold-hover)]',
+  secondary: 'bg-transparent border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)]',
+  alternate: 'bg-white text-[var(--color-bg-dark)] hover:bg-[var(--color-accent-gold)]',
+};
+
+const buttonClasses = cn(baseStyles, variantStyles[variant], className);
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  class={buttonClasses}
+  type={!href ? type : undefined}
+>
+  <slot />
+</Tag>
