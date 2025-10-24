@@ -1,0 +1,173 @@
+/**
+ * Estilos globales del proyecto Soulmark Tattoo Studio
+ * Stack: Tailwind CSS v4 + Custom Variables
+ */
+
+/* Importar fuentes de Google (debe ir antes de tailwindcss) */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+/* Variables CSS personalizadas */
+@theme {
+  /* Colores del diseño */
+  --color-bg-dark: #0a0a0a;
+  --color-bg-light: #e8f5e8;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #d1d1d1;
+  --color-text-dark: #0a0a0a;
+  --color-accent-gold: #daa520;
+  --color-accent-gold-hover: #c99415;
+
+  /* Tipografías */
+  --font-heading: "Unbounded", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  /* Espaciado personalizado */
+  --spacing-section: 8rem;
+  --spacing-section-mobile: 4rem;
+}
+
+/* Estilos base del documento */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling con Lenis (será aplicado por JavaScript) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Headings con tipografía Unbounded */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Estilos de scroll personalizados */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold-hover);
+}
+
+/* Utilidades personalizadas */
+.text-stroke {
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+  paint-order: stroke fill;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Animaciones de entrada para elementos con GSAP */
+.gsap-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.gsap-fade-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.gsap-fade-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* Container personalizado con padding responsive */
+.container-custom {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-custom {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* Botón con efecto hover dorado */
+.btn-primary {
+  background-color: var(--color-accent-gold);
+  color: var(--color-bg-dark);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-gold-hover);
+  transform: translateY(-2px);
+}
+
+/* Secciones con espaciado vertical */
+.section-spacing {
+  padding-top: var(--spacing-section-mobile);
+  padding-bottom: var(--spacing-section-mobile);
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+  }
+}

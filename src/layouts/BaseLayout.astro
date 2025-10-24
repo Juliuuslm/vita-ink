@@ -1,0 +1,112 @@
+---
+/**
+ * Layout base del proyecto con integración de Lenis y metadatos SEO
+ */
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Soulmark - Tattoo Studio | Every tattoo should mean something',
+  description = 'At our tattoo studio, we create custom designs that showcase your individuality, ensuring a safe and comfortable experience with our talented artists.',
+  image = '/og-image.jpg',
+} = Astro.props;
+
+// Canonical URL: usa Astro.site si está configurado, sino usa el pathname
+const canonicalURL = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Básico -->
+    <title>{title}</title>
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preconnect para Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+
+  <body>
+    <!-- Contenido principal -->
+    <slot />
+
+    <!-- Script de inicialización de Lenis (Smooth Scrolling) -->
+    <script>
+      import Lenis from 'lenis';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      // Registrar plugin de GSAP
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Inicializar Lenis para smooth scrolling
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      // Sincronizar Lenis con GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+
+      // Hacer Lenis accesible globalmente para otros scripts
+      (window as any).lenis = lenis;
+
+      // Manejar clicks en enlaces anchor (#)
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href') as string);
+          if (target) {
+            lenis.scrollTo(target as HTMLElement, {
+              offset: -80, // Offset para el header fijo
+              duration: 1.5,
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,16 +1,19 @@
 ---
-
+/**
+ * Página principal del sitio Soulmark Tattoo Studio
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <main class="min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <h1 class="text-6xl font-bold text-[var(--color-accent-gold)] mb-4">
+        Soulmark
+      </h1>
+      <p class="text-xl text-[var(--color-text-secondary)]">
+        Estructura base lista. Iniciando desarrollo por fases...
+      </p>
+    </div>
+  </main>
+</BaseLayout>
