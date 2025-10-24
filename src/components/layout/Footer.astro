@@ -1,0 +1,186 @@
+---
+/**
+ * Footer Component
+ * 3 secciones: Info + Navigation | Logo | Copyright
+ */
+import { CONTACT_INFO, SOCIAL_LINKS, NAV_LINKS } from '../../lib/constants';
+---
+
+<footer class="footer-component bg-[var(--color-bg-dark)] text-[var(--color-text-primary)]">
+  <div class="container-custom py-16 md:py-20 lg:py-24">
+    <!-- Sección 1: Info + Navigation Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-12">
+      <!-- Left: Contact Info + Social Links -->
+      <div class="footer-left space-y-8">
+        <!-- Contact Info -->
+        <div class="footer-details space-y-4">
+          <div>
+            <p class="text-sm text-[var(--color-text-secondary)] mb-1">Address:</p>
+            <p class="text-sm text-[var(--color-text-primary)]">{CONTACT_INFO.address}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-[var(--color-text-secondary)] mb-1">Contact:</p>
+            <a
+              href={`tel:${CONTACT_INFO.phone}`}
+              class="text-sm text-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold-hover)] transition-colors block"
+            >
+              {CONTACT_INFO.phone}
+            </a>
+            <a
+              href={`mailto:${CONTACT_INFO.email}`}
+              class="text-sm text-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold-hover)] transition-colors block"
+            >
+              {CONTACT_INFO.email}
+            </a>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex gap-4">
+          {
+            SOCIAL_LINKS.map((social) => (
+              <a
+                href={social.href}
+                aria-label={social.name}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-10 h-10 rounded-full border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)] transition-all duration-300 flex items-center justify-center"
+              >
+                {/* Placeholder icon - usar SVG real en producción */}
+                <span class="text-xs font-bold">{social.icon.charAt(0).toUpperCase()}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Right: Navigation Links (2 columns) -->
+      <div class="grid grid-cols-2 gap-8">
+        <!-- Column 1 -->
+        <div class="footer-link-list flex flex-col gap-3">
+          <a href="#home" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Home
+          </a>
+          <a href="#about-us" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            About Us
+          </a>
+          <a href="#offerings" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Our Offerings
+          </a>
+          <a href="#artists" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Artists
+          </a>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="footer-link-list flex flex-col gap-3">
+          <a href="#gallery" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Gallery
+          </a>
+          <a href="#testimonials" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Testimonials
+          </a>
+          <a href="#contact" class="footer-link text-sm text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 2: Logo grande centrado -->
+    <div class="footer-logo-wrapper py-12 text-center">
+      <div class="inline-block">
+        <!-- Placeholder para logo SVG grande -->
+        <div class="text-6xl md:text-7xl lg:text-8xl font-bold text-[var(--color-accent-gold)]" style="font-family: var(--font-heading);">
+          SOULMARK
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-[var(--color-text-primary)]/20 my-8"></div>
+
+    <!-- Sección 3: Copyright + Legal Links -->
+    <div class="footer-bottom flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="footer-credit text-sm text-[var(--color-text-secondary)]">
+        © 2025 Tattoo Studio. All rights reserved.
+      </div>
+
+      <div class="footer-legal-links flex gap-6">
+        <a
+          href="/styleguide"
+          class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors"
+        >
+          Styleguide
+        </a>
+        <a
+          href="/changelog"
+          class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors"
+        >
+          Changelog
+        </a>
+        <a
+          href="/license"
+          class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors"
+        >
+          License
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Animaciones GSAP para Footer
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Animar elementos del footer cuando aparecen
+  gsap.from('.footer-left', {
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    scrollTrigger: {
+      trigger: '.footer-component',
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+
+  gsap.from('.footer-link-list', {
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    stagger: 0.2,
+    scrollTrigger: {
+      trigger: '.footer-component',
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+
+  gsap.from('.footer-logo-wrapper', {
+    opacity: 0,
+    scale: 0.9,
+    duration: 0.8,
+    scrollTrigger: {
+      trigger: '.footer-logo-wrapper',
+      start: 'top 85%',
+      toggleActions: 'play none none none',
+    },
+  });
+
+  gsap.from('.footer-bottom', {
+    opacity: 0,
+    y: 20,
+    duration: 0.6,
+    scrollTrigger: {
+      trigger: '.footer-bottom',
+      start: 'top 90%',
+      toggleActions: 'play none none none',
+    },
+  });
+</script>
