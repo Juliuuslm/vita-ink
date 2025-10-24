@@ -11,10 +11,10 @@ Esta carpeta debe contener las imágenes del sitio. Por ahora, coloca imágenes 
 
 **Recomendación:** Usa imágenes de tatuajes con ratio 3:4 (vertical)
 
-## About Section (próxima fase)
-- `about-1.jpg`
-- `about-2.jpg`
-- `about-3.jpg`
+## About Section ✓
+- `about-1.jpg` (400px width - ratio 3:4)
+- `about-2.jpg` (400px width - ratio 3:4)
+- `about-3.jpg` (608px width - ratio 16:10 o similar, más ancha)
 
 ## Services (próxima fase)
 - `service-temporary.jpg`
