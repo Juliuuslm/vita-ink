@@ -1,38 +1,35 @@
 /**
- * Hero Section con columnas de imágenes parallax vertical
- * Efecto basado en el fetch de Soulmark (5 columnas con velocidades diferentes)
+ * Hero Section con columnas de imágenes con Infinite Vertical Marquee
+ * Efecto automático sin vinculación al scroll - basado en el fetch de Soulmark
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Configuración de columnas de imágenes (4 imágenes por columna)
 const COLUMNS = [
   {
     id: 1,
-    speed: -0.5, // Velocidad parallax negativa
+    duration: 20, // Duración en segundos (velocidad del marquee)
     images: ['hero-col-1a', 'hero-col-1b', 'hero-col-1c', 'hero-col-1d'],
   },
   {
     id: 2,
-    speed: -0.3,
+    duration: 25, // Velocidad diferente
     images: ['hero-col-2a', 'hero-col-2b', 'hero-col-2c', 'hero-col-2d'],
   },
   {
     id: 3,
-    speed: -0.5,
+    duration: 20,
     images: ['hero-col-3a', 'hero-col-3b', 'hero-col-3c', 'hero-col-3d'],
   },
   {
     id: 4,
-    speed: -0.3,
+    duration: 25,
     images: ['hero-col-4a', 'hero-col-4b', 'hero-col-4c', 'hero-col-4d'],
   },
   {
     id: 5,
-    speed: -0.5,
+    duration: 20,
     images: ['hero-col-5a', 'hero-col-5b', 'hero-col-5c', 'hero-col-5d'],
   },
 ];
@@ -62,22 +59,22 @@ export default function Hero() {
         ease: 'power2.out',
       });
 
-      // Animación parallax para cada columna
+      // Crear animación de marquee infinito para cada columna
       COLUMNS.forEach((column) => {
         const columnElement = document.querySelector(
           `[data-column="${column.id}"]`
         );
 
         if (columnElement) {
+          // Obtener la altura del contenedor
+          const contentHeight = (columnElement as HTMLElement).scrollHeight / 2; // Dividido por 2 porque hay dos listas duplicadas
+
+          // Animación infinita: desplaza desde 0 hasta la mitad de la altura, luego vuelve a 0
           gsap.to(columnElement, {
-            y: () => window.innerHeight * column.speed,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-            },
+            y: -contentHeight,
+            duration: column.duration,
+            repeat: -1, // Loop infinito
+            ease: 'none', // Sin easing para movimiento constante
           });
         }
       });
@@ -98,26 +95,37 @@ export default function Hero() {
         className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/90 z-10"
       />
 
-      {/* Columnas de imágenes con parallax */}
-      <div className="absolute inset-0 flex gap-2 sm:gap-4">
+      {/* Contenedor de columnas con overflow hidden */}
+      <div className="absolute inset-0 flex gap-2 sm:gap-4 overflow-hidden">
         {COLUMNS.map((column) => (
           <div
             key={column.id}
             data-column={column.id}
             className="flex-1 flex flex-col gap-2 sm:gap-4 will-change-transform"
           >
-            {/* Duplicar las imágenes para efecto infinito */}
-            {[...column.images, ...column.images].map((img, idx) => (
-              <div
-                key={`${img}-${idx}`}
-                className="relative w-full aspect-[3/4] flex-shrink-0"
-              >
+            {/* Primera lista de imágenes */}
+            {column.images.map((img) => (
+              <div key={`${img}-first`} className="relative w-full aspect-[3/4] flex-shrink-0">
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
                     src={`/placeholders/${img}.jpg`}
                     alt={`Hero image ${img}`}
                     className="w-full h-full object-cover"
-                    loading={idx < 4 ? 'eager' : 'lazy'}
+                    loading="eager"
+                  />
+                </div>
+              </div>
+            ))}
+
+            {/* Segunda lista de imágenes (duplicada para loop infinito) */}
+            {column.images.map((img) => (
+              <div key={`${img}-second`} className="relative w-full aspect-[3/4] flex-shrink-0">
+                <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
+                  <img
+                    src={`/placeholders/${img}.jpg`}
+                    alt={`Hero image ${img}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </div>
               </div>
