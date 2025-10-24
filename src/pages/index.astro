@@ -7,6 +7,7 @@ import Header from '../components/layout/Header.astro';
 import Hero from '../components/sections/Hero';
 import About from '../components/sections/About';
 import Services from '../components/sections/Services';
+import Artists from '../components/sections/Artists';
 ---
 
 <BaseLayout>
@@ -14,11 +15,12 @@ import Services from '../components/sections/Services';
   <Hero client:load />
   <About client:load />
   <Services client:load />
+  <Artists client:load />
 
   {/* Las siguientes secciones se agregarán en las próximas fases */}
-  <div class="min-h-screen flex items-center justify-center bg-[var(--color-bg-dark)]">
-    <p class="text-2xl text-[var(--color-text-primary)] font-bold">
-      Próximas secciones: Artists, Gallery, CTA, Testimonials, Contact, Footer
+  <div class="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)]">
+    <p class="text-2xl text-[var(--color-text-dark)] font-bold">
+      Próximas secciones: Gallery, CTA, Testimonials, Contact, Footer
     </p>
   </div>
 </BaseLayout>

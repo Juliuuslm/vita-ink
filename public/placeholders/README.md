@@ -37,11 +37,13 @@ Esta carpeta debe contener las imágenes del sitio. Por ahora, coloca imágenes 
 - `service-full-b.jpg` (120px - decorativa)
 - `service-full-c.jpg` (120px - decorativa)
 
-## Artists (próxima fase)
-- `team-alex.jpg`
-- `team-jordan.jpg`
-- `team-sam.jpg`
-- `team-riley.jpg`
+## Artists Section ✓
+- `team-alex.jpg` (608px width - ratio 3:4)
+- `team-jordan.jpg` (608px width - ratio 3:4)
+- `team-sam.jpg` (608px width - ratio 3:4)
+- `team-riley.jpg` (608px width - ratio 3:4)
+
+**Recomendación:** Fotos profesionales de los artistas en formato vertical
 
 ## Testimonials (próxima fase)
 - `testimonial-1.jpg`
