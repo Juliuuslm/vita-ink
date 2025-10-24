@@ -79,12 +79,14 @@ export default function Gallery() {
             ease: 'none',
             scrollTrigger: {
               trigger: section,
+              scroller: document.documentElement, // Usar el scroller configurado con scrollerProxy
               start: 'top top',
               end: () => `+=${getDistance()}`,
               scrub: 1,
               pin: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              // markers: true, // Descomentar para debugging
             },
           });
         }
