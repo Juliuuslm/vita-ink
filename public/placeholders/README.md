@@ -50,8 +50,13 @@ Esta carpeta debe contener las imágenes del sitio. Por ahora, coloca imágenes 
 - `testimonial-2.jpg`
 - `testimonial-3.jpg`
 
-## Gallery (próxima fase)
-- `gallery-1.jpg` hasta `gallery-12.jpg`
+## Gallery Section ✓
+- `gallery-1.jpg` hasta `gallery-12.jpg` (12 imágenes total)
+- Width: 400px (desktop), 350px (tablet), 280px (mobile)
+- Aspect ratio: 3:4 (vertical/portrait)
+- Scroll horizontal con 12 trabajos del estudio
+
+**Recomendación:** Fotos de tatuajes finalizados en formato vertical
 
 ---
 
