@@ -10,9 +10,6 @@ import Services from '../components/sections/Services';
 import Artists from '../components/sections/Artists';
 import Gallery from '../components/sections/Gallery';
 import CTA from '../components/sections/CTA';
-import Testimonials from '../components/sections/Testimonials';
-import Contact from '../components/sections/Contact';
-import Footer from '../components/layout/Footer.astro';
 ---
 
 <BaseLayout>
@@ -23,7 +20,11 @@ import Footer from '../components/layout/Footer.astro';
   <Artists client:load />
   <Gallery client:load />
   <CTA client:load />
-  <Testimonials client:load />
-  <Contact client:load />
-  <Footer />
+
+  {/* Las siguientes secciones se agregarán en las próximas fases */}
+  <div class="min-h-screen flex items-center justify-center bg-[var(--color-bg-dark)]">
+    <p class="text-2xl text-[var(--color-text-primary)] font-bold">
+      Próximas secciones: Testimonials, Contact, Footer
+    </p>
+  </div>
 </BaseLayout>

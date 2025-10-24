@@ -28,27 +28,15 @@ export default function Gallery() {
     // Esperar a que todas las imágenes carguen antes de medir
     const waitImagesLoaded = async (container: HTMLElement) => {
       const images = Array.from(container.querySelectorAll('img'));
-      console.log('[Gallery Debug] Total imágenes encontradas:', images.length);
-
       await Promise.all(
-        images.map((img, index) => {
-          if (img.complete) {
-            console.log(`[Gallery Debug] Imagen ${index + 1} ya cargada:`, img.src);
-            return Promise.resolve();
-          }
+        images.map((img) => {
+          if (img.complete) return Promise.resolve();
           return new Promise((resolve) => {
-            img.addEventListener('load', () => {
-              console.log(`[Gallery Debug] Imagen ${index + 1} cargada:`, img.src);
-              resolve(null);
-            }, { once: true });
-            img.addEventListener('error', () => {
-              console.error(`[Gallery Debug] Error cargando imagen ${index + 1}:`, img.src);
-              resolve(null);
-            }, { once: true });
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
           });
         })
       );
-      console.log('[Gallery Debug] Todas las imágenes procesadas');
     };
 
     const setupAnimation = async () => {
@@ -79,48 +67,26 @@ export default function Gallery() {
         const getDistance = () => {
           const trackWidth = track.scrollWidth;
           const viewportWidth = window.innerWidth;
-          const distance = Math.max(0, trackWidth - viewportWidth);
-          console.log('[Gallery Debug] Medidas:', {
-            trackWidth,
-            viewportWidth,
-            distance,
-            trackElementWidth: track.offsetWidth,
-            trackScrollWidth: track.scrollWidth,
-          });
-          return distance;
+          return Math.max(0, trackWidth - viewportWidth);
         };
 
         const distance = getDistance();
-        console.log('[Gallery Debug] Distance calculado:', distance);
 
         // Solo crear animación si hay contenido que scrollear
         if (distance > 0) {
-          console.log('[Gallery Debug] Creando ScrollTrigger con pin...');
-
-          const scrollTriggerInstance = gsap.to(track, {
+          gsap.to(track, {
             x: () => `-${getDistance()}`,
             ease: 'none',
             scrollTrigger: {
               trigger: section,
-              scroller: document.documentElement, // Usar el scroller configurado con scrollerProxy
               start: 'top top',
               end: () => `+=${getDistance()}`,
               scrub: 1,
               pin: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              markers: true, // ACTIVADO para debugging
-              onEnter: () => console.log('[Gallery Debug] ScrollTrigger ENTER'),
-              onLeave: () => console.log('[Gallery Debug] ScrollTrigger LEAVE'),
-              onEnterBack: () => console.log('[Gallery Debug] ScrollTrigger ENTER BACK'),
-              onLeaveBack: () => console.log('[Gallery Debug] ScrollTrigger LEAVE BACK'),
-              onUpdate: (self) => console.log('[Gallery Debug] ScrollTrigger progress:', self.progress),
             },
           });
-
-          console.log('[Gallery Debug] ScrollTrigger creado:', scrollTriggerInstance);
-        } else {
-          console.warn('[Gallery Debug] ❌ NO se creó ScrollTrigger - distance es 0 o negativo');
         }
       }, section);
 
