@@ -1,6 +1,7 @@
 /**
  * Gallery Section - "A Collection of Artistic Expression and Personal Stories"
- * Mosaico horizontal de 2 filas con alturas mixtas y anchos variables
+ * Scroll horizontal con imágenes cinematográficas (landscape 16:9 / 21:9)
+ * Usa ScrollTrigger pin para convertir scroll vertical en desplazamiento horizontal
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
@@ -8,71 +9,116 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Estructura del mosaico: 8 columnas con 12 imágenes
-// Columnas con altura completa (full) o media altura (half - 2 imágenes apiladas)
-interface GalleryColumn {
-  id: number;
-  type: 'full' | 'half';
-  width: number; // px
-  images: number[]; // IDs de imágenes (1-12)
-}
-
-const GALLERY_COLUMNS: GalleryColumn[] = [
-  { id: 1, type: 'full', width: 400, images: [1] },
-  { id: 2, type: 'half', width: 350, images: [2, 3] },
-  { id: 3, type: 'full', width: 450, images: [4] },
-  { id: 4, type: 'half', width: 300, images: [5, 6] },
-  { id: 5, type: 'full', width: 500, images: [7] },
-  { id: 6, type: 'half', width: 380, images: [8, 9] },
-  { id: 7, type: 'full', width: 420, images: [10] },
-  { id: 8, type: 'half', width: 340, images: [11, 12] },
-];
+// 12 imágenes de galería con diferentes aspect ratios cinematográficos
+const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => ({
+  id: i + 1,
+  src: `/placeholders/gallery-${i + 1}.jpg`,
+  alt: `Tattoo work ${i + 1}`,
+  // Alternar entre 16:9 y 21:9 para variedad visual
+  aspectRatio: i % 2 === 0 ? '16/9' : '21/9',
+}));
 
 export default function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current || !galleryRef.current) return;
+    if (!sectionRef.current || !trackRef.current) return;
 
-    const ctx = gsap.context(() => {
-      // Animación para el header
-      gsap.from('.gallery-header-animate', {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
+    // Esperar a que todas las imágenes carguen antes de medir
+    const waitImagesLoaded = async (container: HTMLElement) => {
+      const images = Array.from(container.querySelectorAll('img'));
+      await Promise.all(
+        images.map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+          });
+        })
+      );
+    };
+
+    const setupAnimation = async () => {
+      const section = sectionRef.current;
+      const track = trackRef.current;
+      if (!section || !track) return;
+
+      // Esperar a que las imágenes carguen
+      await waitImagesLoaded(track);
+
+      // Crear contexto GSAP para cleanup fácil
+      const ctx = gsap.context(() => {
+        // Header fade-in
+        gsap.from('.gallery-header-animate', {
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+
+        // Calcular la distancia total de scroll horizontal
+        const getDistance = () => {
+          const trackWidth = track.scrollWidth;
+          const viewportWidth = window.innerWidth;
+          return Math.max(0, trackWidth - viewportWidth);
+        };
+
+        const distance = getDistance();
+
+        // Solo crear animación si hay contenido que scrollear
+        if (distance > 0) {
+          gsap.to(track, {
+            x: () => `-${getDistance()}`,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: () => `+=${getDistance()}`,
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+      }, section);
+
+      // Cleanup
+      return () => ctx.revert();
+    };
+
+    let cleanup: (() => void) | undefined;
+    setupAnimation().then((fn) => {
+      cleanup = fn;
+    });
+
+    // Recalcular en resize
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      cleanup?.();
+      window.removeEventListener('resize', handleResize);
+      ScrollTrigger.getAll().forEach((st) => {
+        if (st.trigger === sectionRef.current) st.kill();
       });
-
-      // Animación para las columnas
-      gsap.from('.gallery-column', {
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: galleryRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
+    };
   }, []);
 
   return (
     <section
       id="gallery"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-light)]"
+      className="section-spacing bg-[var(--color-bg-light)] overflow-hidden"
     >
       <div className="container-custom">
         {/* Header */}
@@ -87,173 +133,40 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* Mosaico horizontal con scroll */}
-        <div
-          ref={galleryRef}
-          className="gallery-mosaic-container"
-          data-lenis-prevent
-        >
-          <div className="gallery-mosaic-content">
-            {GALLERY_COLUMNS.map((column) => (
-              <div
-                key={column.id}
-                className="gallery-column"
-                style={{ width: `${column.width}px` }}
-              >
-                {column.type === 'full' ? (
-                  // Columna con 1 imagen de altura completa
-                  <div className="gallery-image-full">
-                    <img
-                      src={`/placeholders/gallery-${column.images[0]}.jpg`}
-                      alt={`Tattoo work ${column.images[0]}`}
-                      className="gallery-img"
-                      loading="lazy"
-                    />
-                  </div>
-                ) : (
-                  // Columna con 2 imágenes apiladas (media altura)
-                  <div className="gallery-images-half">
-                    <div className="gallery-image-half-top">
-                      <img
-                        src={`/placeholders/gallery-${column.images[0]}.jpg`}
-                        alt={`Tattoo work ${column.images[0]}`}
-                        className="gallery-img"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="gallery-image-half-bottom">
-                      <img
-                        src={`/placeholders/gallery-${column.images[1]}.jpg`}
-                        alt={`Tattoo work ${column.images[1]}`}
-                        className="gallery-img"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                )}
+        {/* Track de scroll horizontal (será animado con ScrollTrigger pin) */}
+        <div className="relative">
+          <div
+            ref={trackRef}
+            className="gallery-track flex gap-6 md:gap-8 will-change-transform"
+          >
+            {GALLERY_IMAGES.map((image) => (
+              <div key={image.id} className="flex-shrink-0">
+                {/* Altura fija, ancho automático según aspect ratio */}
+                <div
+                  className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
+                  style={{
+                    aspectRatio: image.aspectRatio,
+                  }}
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                  {/* Overlay hover */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Indicador de scroll */}
-        <div className="mt-6 text-center text-sm text-[var(--color-text-dark)]/60">
-          ← Scroll para ver más trabajos →
+          {/* Indicador de scroll */}
+          <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60">
+            ↓ Scroll para explorar la galería →
+          </div>
         </div>
       </div>
-
-      {/* Estilos del mosaico */}
-      <style jsx>{`
-        /* Contenedor principal - altura fija y scroll horizontal */
-        .gallery-mosaic-container {
-          width: 100%;
-          height: 60vh;
-          min-height: 400px;
-          max-height: 700px;
-          overflow-x: auto;
-          overflow-y: hidden;
-          overscroll-behavior-x: contain;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        /* Contenido scrolleable - flexbox horizontal */
-        .gallery-mosaic-content {
-          display: flex;
-          gap: 1rem;
-          height: 100%;
-          width: max-content;
-        }
-
-        /* Cada columna */
-        .gallery-column {
-          flex-shrink: 0;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-
-        /* Imagen de altura completa (ocupa toda la columna) */
-        .gallery-image-full {
-          height: 100%;
-          width: 100%;
-          overflow: hidden;
-          border-radius: 1rem;
-          position: relative;
-        }
-
-        /* Contenedor de imágenes de media altura */
-        .gallery-images-half {
-          display: grid;
-          grid-template-rows: 1fr 1fr;
-          gap: 1rem;
-          height: 100%;
-          width: 100%;
-        }
-
-        /* Imagen superior de media altura */
-        .gallery-image-half-top,
-        .gallery-image-half-bottom {
-          overflow: hidden;
-          border-radius: 1rem;
-          position: relative;
-        }
-
-        /* Todas las imágenes */
-        .gallery-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        /* Hover effect en imágenes */
-        .gallery-column:hover .gallery-img {
-          transform: scale(1.05);
-        }
-
-        /* Scrollbar personalizada */
-        .gallery-mosaic-container::-webkit-scrollbar {
-          height: 8px;
-        }
-
-        .gallery-mosaic-container::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.1);
-          border-radius: 4px;
-        }
-
-        .gallery-mosaic-container::-webkit-scrollbar-thumb {
-          background: var(--color-accent-gold);
-          border-radius: 4px;
-        }
-
-        .gallery-mosaic-container::-webkit-scrollbar-thumb:hover {
-          background: var(--color-accent-gold-hover);
-        }
-
-        /* Responsive: ajustar altura en móviles */
-        @media (max-width: 768px) {
-          .gallery-mosaic-container {
-            height: 50vh;
-            min-height: 350px;
-          }
-
-          .gallery-mosaic-content {
-            gap: 0.75rem;
-          }
-
-          .gallery-images-half {
-            gap: 0.75rem;
-          }
-        }
-
-        /* Tablet */
-        @media (min-width: 768px) and (max-width: 1024px) {
-          .gallery-mosaic-container {
-            height: 55vh;
-            min-height: 400px;
-          }
-        }
-      `}</style>
     </section>
   );
 }
