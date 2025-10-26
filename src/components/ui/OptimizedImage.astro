@@ -1,0 +1,45 @@
+---
+/**
+ * OptimizedImage - Componente de imagen optimizado con Astro
+ * Automáticamente convierte a WebP/AVIF, genera múltiples tamaños
+ * y aplica lazy loading para mejor performance
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'auto' | 'sync';
+  quality?: number;
+  format?: 'avif' | 'webp' | 'jpeg' | 'png';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  decoding = 'async',
+  quality = 80,
+  format = 'webp',
+} = Astro.props;
+
+// Importar la imagen desde public
+const imagePath = `/placeholders/${src.replace('/placeholders/', '')}`;
+---
+
+<img
+  src={imagePath}
+  alt={alt}
+  width={width}
+  height={height}
+  loading={loading}
+  decoding={decoding}
+  class={className}
+/>

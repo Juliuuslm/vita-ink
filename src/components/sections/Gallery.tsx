@@ -10,13 +10,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 // 12 imágenes de galería con diferentes aspect ratios cinematográficos
-const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  src: `/placeholders/gallery-${i + 1}.jpg`,
-  alt: `Tattoo work ${i + 1}`,
-  // Alternar entre 16:9 y 21:9 para variedad visual
-  aspectRatio: i % 2 === 0 ? '16/9' : '21/9',
-}));
+// Calculamos widths explícitos para asegurar que el scrollWidth sea correcto
+const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => {
+  const is16by9 = i % 2 === 0;
+  // Para 400px de altura:
+  // 16:9 = 711px ancho
+  // 21:9 = 933px ancho
+  return {
+    id: i + 1,
+    src: `/placeholders/gallery-${i + 1}.jpg`,
+    alt: `Tattoo work ${i + 1}`,
+    aspectRatio: is16by9 ? '16/9' : '21/9',
+    width: is16by9 ? 711 : 933, // widths para 400px altura
+  };
+});
 
 export default function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -67,15 +74,25 @@ export default function Gallery() {
         const getDistance = () => {
           const trackWidth = track.scrollWidth;
           const viewportWidth = window.innerWidth;
-          return Math.max(0, trackWidth - viewportWidth);
+          const distance = Math.max(0, trackWidth - viewportWidth);
+
+          // Debug info
+          console.log('[Gallery ScrollTrigger]', {
+            trackWidth,
+            viewportWidth,
+            distance,
+            willScroll: distance > 0
+          });
+
+          return distance;
         };
 
         const distance = getDistance();
 
         // Solo crear animación si hay contenido que scrollear
         if (distance > 0) {
-          gsap.to(track, {
-            x: () => `-${getDistance()}`,
+          const animation = gsap.to(track, {
+            x: () => -getDistance(),
             ease: 'none',
             scrollTrigger: {
               trigger: section,
@@ -85,8 +102,16 @@ export default function Gallery() {
               pin: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              markers: false, // Cambiar a true para debug
+              onUpdate: (self) => {
+                console.log('[ScrollTrigger] Progress:', self.progress);
+              }
             },
           });
+
+          console.log('[Gallery] ScrollTrigger animation created');
+        } else {
+          console.warn('[Gallery] No se creó animación - distance:', distance);
         }
       }, section);
 
@@ -141,8 +166,8 @@ export default function Gallery() {
           className="gallery-track flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16"
         >
           {GALLERY_IMAGES.map((image) => (
-            <div key={image.id} className="flex-shrink-0">
-              {/* Altura fija, ancho automático según aspect ratio */}
+            <div key={image.id} className="flex-shrink-0" style={{ width: `${image.width}px` }}>
+              {/* Altura fija con width explícito para scroll horizontal */}
               <div
                 className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
                 style={{
@@ -153,7 +178,7 @@ export default function Gallery() {
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  loading="lazy"
+                  loading="eager"
                 />
                 {/* Overlay hover */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
