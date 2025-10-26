@@ -25,10 +25,10 @@ const SERVICES: Service[] = [
     title: 'Temporary tattoos',
     description: 'Temporary tattoos are a great way to experiment with body art without making a permanent commitment. They are ideal for special events, short-term style changes, or testing out designs before getting inked.',
     cta: 'Try it on',
-    mainImage: '/placeholders/service-temporary-main.jpg',
+    mainImage: '/placeholders/service-temporary.jpg',
     decorativeImages: [
-      '/placeholders/service-temporary-b.jpg',
-      '/placeholders/service-temporary-c.jpg',
+      '/placeholders/service-temporary-deco-1.jpg',
+      '/placeholders/service-temporary-deco-2.jpg',
     ],
     bgColor: 'light',
     reverseLayout: false, // texto izq, imagen der
@@ -38,10 +38,10 @@ const SERVICES: Service[] = [
     title: 'Minimal tattoos',
     description: 'Minimal tattoos focus on simplicity and elegance. They use clean lines, small symbols, and subtle detail to create timeless designs that are perfect for those who prefer a more understated look.',
     cta: 'Start Simple',
-    mainImage: '/placeholders/service-minimal-main.jpg',
+    mainImage: '/placeholders/service-minimal.jpg',
     decorativeImages: [
-      '/placeholders/service-minimal-b.jpg',
-      '/placeholders/service-minimal-c.jpg',
+      '/placeholders/service-minimal-deco-1.jpg',
+      '/placeholders/service-minimal-deco-2.jpg',
     ],
     bgColor: 'dark',
     reverseLayout: true, // imagen izq, texto der
@@ -51,10 +51,10 @@ const SERVICES: Service[] = [
     title: 'Lettering Tattoos',
     description: 'Lettering tattoos feature meaningful words, names, or quotes expressed through custom fonts and creative typography. They are a powerful way to carry a message, emotion, or personal story with you.',
     cta: 'Design Yours',
-    mainImage: '/placeholders/service-lettering-main.jpg',
+    mainImage: '/placeholders/service-lettering.jpg',
     decorativeImages: [
-      '/placeholders/service-lettering-b.jpg',
-      '/placeholders/service-lettering-c.jpg',
+      '/placeholders/service-lettering-deco-1.jpg',
+      '/placeholders/service-lettering-deco-2.jpg',
     ],
     bgColor: 'light',
     reverseLayout: false, // texto izq, imagen der
@@ -64,10 +64,10 @@ const SERVICES: Service[] = [
     title: 'Full Coverage Tattoo',
     description: 'Full coverage tattoos are large-scale artworks that span significant areas of the body. These comprehensive designs tell complete stories and showcase the pinnacle of tattoo artistry.',
     cta: 'Go Big',
-    mainImage: '/placeholders/service-full-main.jpg',
+    mainImage: '/placeholders/service-full.jpg',
     decorativeImages: [
-      '/placeholders/service-full-b.jpg',
-      '/placeholders/service-full-c.jpg',
+      '/placeholders/service-full-deco-1.jpg',
+      '/placeholders/service-full-deco-2.jpg',
     ],
     bgColor: 'dark',
     reverseLayout: true, // imagen izq, texto der
