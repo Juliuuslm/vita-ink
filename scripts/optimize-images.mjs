@@ -2,15 +2,19 @@
  * Script para optimizar imágenes JPG a WebP
  * Reduce el tamaño de las imágenes grandes manteniendo calidad visual
  *
- * Uso: node scripts/optimize-images.js
+ * Uso: node scripts/optimize-images.mjs
  */
 
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const IMAGES_DIR = path.join(__dirname, '../public/placeholders');
-const QUALITY = 80; // Calidad WebP (80-90 es óptimo)
+const QUALITY = 85; // Calidad WebP (85 = balance perfecto entre calidad y tamaño)
 const SIZE_THRESHOLD = 1024 * 1024; // 1MB - optimizar solo imágenes >1MB
 
 async function optimizeImages() {
@@ -49,6 +53,7 @@ async function optimizeImages() {
         optimizedCount++;
       } catch (error) {
         console.error(`❌ Error optimizando ${file}:`, error.message);
+        totalOptimizedSize += stats.size;
       }
     } else {
       console.log(`⏭️  ${file}: ${sizeMB}MB (< 1MB, no optimizar)`);
