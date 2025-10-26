@@ -120,8 +120,8 @@ export default function Gallery() {
       ref={sectionRef}
       className="section-spacing bg-[var(--color-bg-light)] overflow-hidden"
     >
+      {/* Header dentro del container */}
       <div className="container-custom">
-        {/* Header */}
         <div className="mb-12 lg:mb-16">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="gallery-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-6">
@@ -132,39 +132,39 @@ export default function Gallery() {
             </p>
           </div>
         </div>
+      </div>
 
-        {/* Track de scroll horizontal (será animado con ScrollTrigger pin) */}
-        <div className="relative">
-          <div
-            ref={trackRef}
-            className="gallery-track flex gap-6 md:gap-8 will-change-transform"
-          >
-            {GALLERY_IMAGES.map((image) => (
-              <div key={image.id} className="flex-shrink-0">
-                {/* Altura fija, ancho automático según aspect ratio */}
-                <div
-                  className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
-                  style={{
-                    aspectRatio: image.aspectRatio,
-                  }}
-                >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                  {/* Overlay hover */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
+      {/* Track de scroll horizontal FUERA del container (full-width) */}
+      <div className="relative">
+        <div
+          ref={trackRef}
+          className="gallery-track flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16"
+        >
+          {GALLERY_IMAGES.map((image) => (
+            <div key={image.id} className="flex-shrink-0">
+              {/* Altura fija, ancho automático según aspect ratio */}
+              <div
+                className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
+                style={{
+                  aspectRatio: image.aspectRatio,
+                }}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                {/* Overlay hover */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Indicador de scroll */}
-          <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60">
-            ↓ Scroll para explorar la galería →
-          </div>
+        {/* Indicador de scroll */}
+        <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60 px-6">
+          ↓ Scroll para explorar la galería →
         </div>
       </div>
     </section>
