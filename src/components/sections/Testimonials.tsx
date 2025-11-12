@@ -75,7 +75,7 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)]"
+      className="section-spacing bg-[var(--color-bg-dark)] relative z-20"
     >
       <div className="container-custom">
         <div className="testimonials-content max-w-4xl mx-auto">
