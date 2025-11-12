@@ -96,14 +96,14 @@ export default function Gallery() {
             ease: 'none',
             scrollTrigger: {
               trigger: section,
-              start: 'top top',
-              end: () => `+=${getDistance()}`,
-              scrub: 0.5, // Reducido de 1 para transiciones más suaves
+              start: 'top 5%', // Buffer de entrada para transición suave
+              end: () => `+=${getDistance() + window.innerHeight * 0.2}`, // Buffer de salida (20vh)
+              scrub: 1, // Balance entre suavidad y responsividad
               pin: true,
-              pinSpacing: false, // Elimina espacio automático que causa saltos
+              pinSpacing: true, // CRÍTICO: true previene doble scroll
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              markers: true, // Debug temporal para verificar triggers
+              markers: false, // Desactivado para producción
               onUpdate: (self) => {
                 console.log('[ScrollTrigger] Progress:', self.progress);
               }
@@ -144,7 +144,7 @@ export default function Gallery() {
     <section
       id="gallery"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-light)] overflow-hidden"
+      className="section-spacing bg-[var(--color-bg-light)] overflow-hidden pb-[15vh]"
     >
       {/* Header dentro del container */}
       <div className="container-custom">
