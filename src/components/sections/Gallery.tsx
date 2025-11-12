@@ -98,11 +98,12 @@ export default function Gallery() {
               trigger: section,
               start: 'top top',
               end: () => `+=${getDistance()}`,
-              scrub: 1,
+              scrub: 0.5, // Reducido de 1 para transiciones más suaves
               pin: true,
+              pinSpacing: false, // Elimina espacio automático que causa saltos
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              markers: false, // Cambiar a true para debug
+              markers: true, // Debug temporal para verificar triggers
               onUpdate: (self) => {
                 console.log('[ScrollTrigger] Progress:', self.progress);
               }
