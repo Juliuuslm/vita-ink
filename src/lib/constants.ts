@@ -44,7 +44,7 @@ export const SERVICES = [
     title: 'Temporary tattoos',
     description: 'Temporary tattoos are a great way to experiment with body art without making a permanent commitment. They are ideal for special events, short-term style changes, or testing out designs before getting inked.',
     cta: 'Try it on',
-    image: '/placeholders/service-temporary.jpg',
+    image: '/placeholders/service-temporary.webp',
     bgColor: 'light',
   },
   {
@@ -52,7 +52,7 @@ export const SERVICES = [
     title: 'Minimal tattoos',
     description: 'Minimal tattoos focus on simplicity and elegance. They use clean lines, small symbols, and subtle detail to create timeless designs that are perfect for those who prefer a more understated look.',
     cta: 'Start Simple',
-    image: '/placeholders/service-minimal.jpg',
+    image: '/placeholders/service-minimal.webp',
     bgColor: 'dark',
   },
   {
@@ -60,7 +60,7 @@ export const SERVICES = [
     title: 'Lettering Tattoos',
     description: 'Lettering tattoos feature meaningful words, names, or quotes expressed through custom fonts and creative typography. They are a powerful way to carry a message, emotion, or personal story with you.',
     cta: 'Design Yours',
-    image: '/placeholders/service-lettering.jpg',
+    image: '/placeholders/service-lettering.webp',
     bgColor: 'light',
   },
   {
@@ -68,7 +68,7 @@ export const SERVICES = [
     title: 'Full Coverage Tattoo',
     description: 'Full coverage tattoos are large-scale artworks that span significant areas of the body. These comprehensive designs tell complete stories and showcase the pinnacle of tattoo artistry.',
     cta: 'Go Big',
-    image: '/placeholders/service-full.jpg',
+    image: '/placeholders/service-full.webp',
     bgColor: 'dark',
   },
 ] as const;
@@ -79,25 +79,25 @@ export const ARTISTS = [
     id: 'alex-morgan',
     name: 'Alex Morgan',
     role: 'Lead Artist',
-    image: '/placeholders/team-alex.jpg',
+    image: '/placeholders/team-alex.webp',
   },
   {
     id: 'jordan-lee',
     name: 'Jordan Lee',
     role: 'Tattoo Artist',
-    image: '/placeholders/team-jordan.jpg',
+    image: '/placeholders/team-jordan.webp',
   },
   {
     id: 'sam-taylor',
     name: 'Sam Taylor',
     role: 'Apprentice Artist',
-    image: '/placeholders/team-sam.jpg',
+    image: '/placeholders/team-sam.webp',
   },
   {
     id: 'riley-chen',
     name: 'Riley Chen',
     role: 'Guest Artist',
-    image: '/placeholders/team-riley.jpg',
+    image: '/placeholders/team-riley.webp',
   },
 ] as const;
 
@@ -109,7 +109,7 @@ export const TESTIMONIALS = [
     role: 'Customer',
     rating: 5,
     quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
-    image: '/placeholders/testimonial-1.jpg',
+    image: '/placeholders/testimonial-1.webp',
   },
   {
     id: 2,
@@ -117,7 +117,7 @@ export const TESTIMONIALS = [
     role: 'Customer',
     rating: 5,
     quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
-    image: '/placeholders/testimonial-2.jpg',
+    image: '/placeholders/testimonial-2.webp',
   },
   {
     id: 3,
@@ -125,7 +125,7 @@ export const TESTIMONIALS = [
     role: 'Customer',
     rating: 5,
     quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
-    image: '/placeholders/testimonial-3.jpg',
+    image: '/placeholders/testimonial-3.webp',
   },
 ] as const;
 

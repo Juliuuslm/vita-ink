@@ -18,7 +18,7 @@ const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => {
   // 21:9 = 933px ancho
   return {
     id: i + 1,
-    src: `/placeholders/gallery-${i + 1}.jpg`,
+    src: `/placeholders/gallery-${i + 1}.webp`,
     alt: `Tattoo work ${i + 1}`,
     aspectRatio: is16by9 ? '16/9' : '21/9',
     width: is16by9 ? 711 : 933, // widths para 400px altura

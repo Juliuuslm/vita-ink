@@ -108,7 +108,7 @@ export default function Hero() {
               <div key={`${img}-first`} className="relative w-full aspect-[3/4] flex-shrink-0">
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
-                    src={`/placeholders/${img}.jpg`}
+                    src={`/placeholders/${img}.webp`}
                     alt={`Hero image ${img}`}
                     className="w-full h-full object-cover"
                     loading="eager"
@@ -122,7 +122,7 @@ export default function Hero() {
               <div key={`${img}-second`} className="relative w-full aspect-[3/4] flex-shrink-0">
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
-                    src={`/placeholders/${img}.jpg`}
+                    src={`/placeholders/${img}.webp`}
                     alt={`Hero image ${img}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
