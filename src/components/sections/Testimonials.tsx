@@ -46,14 +46,14 @@ export default function Testimonials() {
     return () => ctx.revert();
   }, []);
 
-  // Animación al cambiar de slide
+  // Animación al cambiar de slide (solo x, sin opacity para mantener inline style)
   useEffect(() => {
     if (!slideRef.current) return;
 
     gsap.fromTo(
       slideRef.current,
-      { opacity: 0, x: 50 },
-      { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }
+      { x: 50 },
+      { x: 0, duration: 0.5, ease: 'power2.out' }
     );
   }, [currentSlide]);
 
