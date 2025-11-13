@@ -2,8 +2,9 @@
  * Gallery Section - "A Collection of Artistic Expression and Personal Stories"
  * Scroll horizontal con imágenes cinematográficas (landscape 16:9 / 21:9)
  * Usa ScrollTrigger pin para convertir scroll vertical en desplazamiento horizontal
+ * En móvil: grid vertical simple sin ScrollTrigger para evitar overlap con otras secciones
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -28,9 +29,44 @@ const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => {
 export default function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si estamos en móvil (< 768px = md breakpoint)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
+
+    // En móvil, no aplicar ScrollTrigger horizontal
+    if (isMobile) {
+      // Solo animación de fade-in del header
+      const section = sectionRef.current;
+      const ctx = gsap.context(() => {
+        gsap.from('.gallery-header-animate', {
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }, section);
+
+      return () => ctx.revert();
+    }
 
     // Esperar a que todas las imágenes carguen antes de medir
     const waitImagesLoaded = async (container: HTMLElement) => {
@@ -138,7 +174,7 @@ export default function Gallery() {
         if (st.trigger === sectionRef.current) st.kill();
       });
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
@@ -160,26 +196,38 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Track de scroll horizontal FUERA del container (full-width) */}
+      {/* Track de scroll - Horizontal en desktop, Grid vertical en móvil */}
       <div className="relative">
         <div
           ref={trackRef}
-          className="gallery-track flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16"
+          className={
+            isMobile
+              ? 'grid grid-cols-1 gap-6 px-6'
+              : 'gallery-track flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16'
+          }
         >
           {GALLERY_IMAGES.map((image) => (
-            <div key={image.id} className="flex-shrink-0" style={{ width: `${image.width}px` }}>
-              {/* Altura fija con width explícito para scroll horizontal */}
+            <div
+              key={image.id}
+              className={isMobile ? 'w-full' : 'flex-shrink-0'}
+              style={isMobile ? {} : { width: `${image.width}px` }}
+            >
+              {/* Altura fija con width explícito para scroll horizontal en desktop */}
               <div
-                className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
-                style={{
-                  aspectRatio: image.aspectRatio,
-                }}
+                className={
+                  isMobile
+                    ? 'relative w-full rounded-2xl overflow-hidden group'
+                    : 'relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group'
+                }
+                style={
+                  isMobile ? { aspectRatio: image.aspectRatio } : { aspectRatio: image.aspectRatio }
+                }
               >
                 <img
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  loading="eager"
+                  loading={isMobile ? 'lazy' : 'eager'}
                 />
                 {/* Overlay hover */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -188,10 +236,12 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Indicador de scroll */}
-        <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60 px-6">
-          ↓ Scroll para explorar la galería →
-        </div>
+        {/* Indicador de scroll - solo en desktop */}
+        {!isMobile && (
+          <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60 px-6">
+            ↓ Scroll para explorar la galería →
+          </div>
+        )}
       </div>
     </section>
   );

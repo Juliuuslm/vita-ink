@@ -42,45 +42,107 @@ export default function Hero() {
   useEffect(() => {
     if (!heroRef.current) return;
 
-    const ctx = gsap.context(() => {
-      // Animación de fade-in para el contenido central
-      gsap.from(contentRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        delay: 0.3,
-        ease: 'power3.out',
+    // Función para esperar a que todas las imágenes carguen
+    const waitForImages = (): Promise<void> => {
+      const images = Array.from(heroRef.current!.querySelectorAll('img'));
+      const promises = images.map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise<void>((resolve) => {
+          img.addEventListener('load', () => resolve(), { once: true });
+          img.addEventListener('error', () => resolve(), { once: true });
+        });
       });
+      return Promise.all(promises).then(() => {});
+    };
 
-      // Animación del overlay
-      gsap.from(overlayRef.current, {
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
+    const setupAnimations = async () => {
+      // Esperar a que las imágenes carguen antes de calcular alturas
+      await waitForImages();
+
+      // Pequeño delay adicional para asegurar el layout
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const ctx = gsap.context(() => {
+        // Animación de fade-in para el contenido central
+        gsap.from(contentRef.current, {
+          opacity: 0,
+          y: 50,
+          duration: 1,
+          delay: 0.3,
+          ease: 'power3.out',
+        });
+
+        // Animación del overlay
+        gsap.from(overlayRef.current, {
+          opacity: 0,
+          duration: 1,
+          ease: 'power2.out',
+        });
+
+        // Crear animación de marquee infinito para cada columna
+        COLUMNS.forEach((column) => {
+          const columnElement = document.querySelector(
+            `[data-column="${column.id}"]`
+          );
+
+          if (columnElement) {
+            // Usar getBoundingClientRect para medición más precisa
+            const rect = (columnElement as HTMLElement).getBoundingClientRect();
+            const contentHeight = rect.height / 2; // Dividido por 2 porque hay dos listas duplicadas
+
+            // Animación infinita: desplaza desde 0 hasta la mitad de la altura, luego vuelve a 0
+            gsap.to(columnElement, {
+              y: -contentHeight,
+              duration: column.duration,
+              repeat: -1, // Loop infinito
+              ease: 'none', // Sin easing para movimiento constante
+              modifiers: {
+                // Asegurar que la animación se mantenga consistente
+                y: (y) => {
+                  const numY = parseFloat(y);
+                  return `${numY % contentHeight}px`;
+                }
+              }
+            });
+          }
+        });
+      }, heroRef);
+
+      return ctx;
+    };
+
+    let ctx: gsap.Context | null = null;
+
+    setupAnimations().then((context) => {
+      ctx = context;
+    });
+
+    // Manejar cambios de orientación y resize en móvil
+    const handleResize = () => {
+      if (ctx) {
+        ctx.revert();
+      }
+      setupAnimations().then((context) => {
+        ctx = context;
       });
+    };
 
-      // Crear animación de marquee infinito para cada columna
-      COLUMNS.forEach((column) => {
-        const columnElement = document.querySelector(
-          `[data-column="${column.id}"]`
-        );
+    // Debounce para evitar múltiples recalculaciones
+    let resizeTimeout: NodeJS.Timeout;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 300);
+    };
 
-        if (columnElement) {
-          // Obtener la altura del contenedor
-          const contentHeight = (columnElement as HTMLElement).scrollHeight / 2; // Dividido por 2 porque hay dos listas duplicadas
+    window.addEventListener('resize', debouncedResize);
+    window.addEventListener('orientationchange', debouncedResize);
 
-          // Animación infinita: desplaza desde 0 hasta la mitad de la altura, luego vuelve a 0
-          gsap.to(columnElement, {
-            y: -contentHeight,
-            duration: column.duration,
-            repeat: -1, // Loop infinito
-            ease: 'none', // Sin easing para movimiento constante
-          });
-        }
-      });
-    }, heroRef);
-
-    return () => ctx.revert();
+    return () => {
+      if (ctx) ctx.revert();
+      window.removeEventListener('resize', debouncedResize);
+      window.removeEventListener('orientationchange', debouncedResize);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   return (
