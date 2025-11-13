@@ -20,25 +20,26 @@ export default function Contact() {
   });
   const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
+  // Animación desactivada para mantener opacity: 1 forzado inline
+  // useEffect(() => {
+  //   if (!sectionRef.current) return;
 
-    const ctx = gsap.context(() => {
-      gsap.from('.contact-content-animate', {
-        opacity: 0,
-        y: 40,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }, sectionRef);
+  //   const ctx = gsap.context(() => {
+  //     gsap.from('.contact-content-animate', {
+  //       opacity: 0,
+  //       y: 40,
+  //       duration: 0.8,
+  //       ease: 'power3.out',
+  //       scrollTrigger: {
+  //         trigger: sectionRef.current,
+  //         start: 'top 70%',
+  //         toggleActions: 'play none none none',
+  //       },
+  //     });
+  //   }, sectionRef);
 
-    return () => ctx.revert();
-  }, []);
+  //   return () => ctx.revert();
+  // }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
