@@ -86,23 +86,29 @@ export default function Hero() {
           );
 
           if (columnElement) {
-            // Usar getBoundingClientRect para medición más precisa
-            const rect = (columnElement as HTMLElement).getBoundingClientRect();
-            const contentHeight = rect.height / 2; // Dividido por 2 porque hay dos listas duplicadas
+            // Usar scrollHeight para calcular la altura total, luego dividir por 2
+            // porque tenemos contenido duplicado (dos listas idénticas)
+            const totalHeight = (columnElement as HTMLElement).scrollHeight;
+            const contentHeight = totalHeight / 2;
 
-            // Animación infinita: desplaza desde 0 hasta la mitad de la altura, luego vuelve a 0
+            console.log(`[Hero Column ${column.id}]`, {
+              totalHeight,
+              contentHeight,
+              duration: column.duration
+            });
+
+            // Resetear posición inicial
+            gsap.set(columnElement, { y: 0 });
+
+            // Animación infinita seamless:
+            // - Inicia en y: 0
+            // - Termina en y: -contentHeight (justo donde empieza la segunda lista)
+            // - repeat: -1 hace que vuelva a y: 0 instantáneamente, creando el loop
             gsap.to(columnElement, {
               y: -contentHeight,
               duration: column.duration,
-              repeat: -1, // Loop infinito
-              ease: 'none', // Sin easing para movimiento constante
-              modifiers: {
-                // Asegurar que la animación se mantenga consistente
-                y: (y) => {
-                  const numY = parseFloat(y);
-                  return `${numY % contentHeight}px`;
-                }
-              }
+              repeat: -1,
+              ease: 'none',
             });
           }
         });
