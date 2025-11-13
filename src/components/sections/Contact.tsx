@@ -142,7 +142,7 @@ export default function Contact() {
           </div>
 
           {/* Formulario */}
-          <div className="contact-content-animate">
+          <div className="contact-content-animate" style={{ opacity: 1 }}>
             <div className="mb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-4">
                 Ready to Start Your Tattoo Journey?
