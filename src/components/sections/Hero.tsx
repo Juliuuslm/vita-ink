@@ -104,15 +104,22 @@ export default function Hero() {
             // Resetear posición inicial
             gsap.set(columnElement, { y: 0 });
 
-            // Animación infinita seamless:
-            // - Inicia en y: 0
-            // - Termina en y: -contentHeight (justo donde empieza la segunda lista, incluyendo gap)
-            // - repeat: -1 hace que vuelva a y: 0 instantáneamente, creando el loop sin espacio negro
+            // Animación infinita seamless usando modulo wrapping:
+            // En lugar de usar repeat: -1 que causa saltos visuales,
+            // usamos un modifier con modulo para wrap continuo sin discontinuidades
             gsap.to(columnElement, {
-              y: -contentHeight,
-              duration: column.duration,
-              repeat: -1,
+              y: -contentHeight * 100, // Target muy largo (100 ciclos)
+              duration: column.duration * 100, // Duración proporcional
               ease: 'none',
+              repeat: -1,
+              modifiers: {
+                y: (y) => {
+                  // Wrap seamless: cuando y llega a -contentHeight, vuelve a 0 matemáticamente
+                  const numericY = parseFloat(y);
+                  const wrapped = numericY % -contentHeight;
+                  return `${wrapped}px`;
+                }
+              }
             });
           }
         });
