@@ -134,6 +134,7 @@ export const CONTACT_INFO = {
   address: 'Level 1, 12 Sample St, Sydney NSW 2000',
   phone: '1800 123 4567',
   email: 'info@tattoostudio.com',
+  mapsUrl: 'https://maps.google.com/?q=Level+1,+12+Sample+St,+Sydney+NSW+2000',
 } as const;
 
 // Redes sociales

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Button from '../ui/Button';
+import { CONTACT_INFO } from '../../lib/constants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -80,9 +81,64 @@ export default function Contact() {
     >
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Imagen decorativa (vacía en el original) */}
-          <div className="contact-image-animate hidden lg:block">
-            <div className="aspect-square rounded-3xl bg-gradient-to-br from-[var(--color-accent-gold)]/10 to-transparent" />
+          {/* Card de Ubicación */}
+          <div className="contact-image-animate hidden lg:flex items-center justify-center">
+            <a
+              href={CONTACT_INFO.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative w-full aspect-square rounded-3xl bg-gradient-to-br from-[var(--color-accent-gold)]/10 to-transparent flex flex-col items-center justify-center p-8 hover:from-[var(--color-accent-gold)]/20 transition-all duration-500 border-2 border-[var(--color-accent-gold)]/20 hover:border-[var(--color-accent-gold)]/40"
+            >
+              {/* Map Icon */}
+              <div className="mb-6 transform group-hover:scale-110 transition-transform duration-500">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-24 h-24 text-[var(--color-accent-gold)]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+
+              {/* Text */}
+              <h3 className="text-3xl md:text-4xl font-bold text-[var(--color-text-dark)] mb-4 text-center">
+                Ver Ubicación
+              </h3>
+              <p className="text-base text-[var(--color-text-dark)]/70 text-center mb-6 max-w-sm">
+                {CONTACT_INFO.address}
+              </p>
+
+              {/* Arrow/Link indicator */}
+              <div className="flex items-center gap-2 text-[var(--color-accent-gold)] font-medium group-hover:gap-4 transition-all duration-300">
+                <span>Abrir en Maps</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </div>
+            </a>
           </div>
 
           {/* Formulario */}
