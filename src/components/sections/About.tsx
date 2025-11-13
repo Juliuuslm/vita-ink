@@ -112,94 +112,30 @@ export default function About() {
           </div>
         </div>
 
-        {/* Grid de cards - Layout asimétrico */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Item 1 - Columna completa en móvil, izquierda en desktop */}
-          <div
-            data-about-item="1"
-            className="flex flex-col max-w-md mx-auto lg:mx-0"
-          >
-            <div className="mb-6 overflow-hidden rounded-2xl">
-              <img
-                src={ABOUT_ITEMS[0].image}
-                alt={ABOUT_ITEMS[0].title}
-                className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-            </div>
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              {ABOUT_ITEMS[0].title}
-            </h3>
-            <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
-              {ABOUT_ITEMS[0].description}
-            </p>
-          </div>
-
-          {/* Items 2 y 3 - Stack vertical en la columna derecha */}
-          <div className="flex flex-col gap-8 lg:gap-12">
-            {/* Item 2 */}
+        {/* Grid de cards - Layout 2x2 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          {ABOUT_ITEMS.map((item) => (
             <div
-              data-about-item="2"
+              key={item.id}
+              data-about-item={item.id}
               className="flex flex-col max-w-md mx-auto lg:mx-0"
             >
               <div className="mb-6 overflow-hidden rounded-2xl">
                 <img
-                  src={ABOUT_ITEMS[1].image}
-                  alt={ABOUT_ITEMS[1].title}
+                  src={item.image}
+                  alt={item.title}
                   className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {ABOUT_ITEMS[1].title}
+                {item.title}
               </h3>
               <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
-                {ABOUT_ITEMS[1].description}
+                {item.description}
               </p>
             </div>
-
-            {/* Item 3 - Imagen más grande */}
-            <div
-              data-about-item="3"
-              className="flex flex-col max-w-lg mx-auto lg:mx-0"
-            >
-              <div className="mb-6 overflow-hidden rounded-2xl">
-                <img
-                  src={ABOUT_ITEMS[2].image}
-                  alt={ABOUT_ITEMS[2].title}
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {ABOUT_ITEMS[2].title}
-              </h3>
-              <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
-                {ABOUT_ITEMS[2].description}
-              </p>
-            </div>
-
-            {/* Item 4 - Nueva card */}
-            <div
-              data-about-item="4"
-              className="flex flex-col max-w-md mx-auto lg:mx-0"
-            >
-              <div className="mb-6 overflow-hidden rounded-2xl">
-                <img
-                  src={ABOUT_ITEMS[3].image}
-                  alt={ABOUT_ITEMS[3].title}
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {ABOUT_ITEMS[3].title}
-              </h3>
-              <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
-                {ABOUT_ITEMS[3].description}
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
