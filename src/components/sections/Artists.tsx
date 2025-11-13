@@ -56,7 +56,7 @@ export default function Artists() {
     >
       <div className="container-custom">
         {/* Header */}
-        <div className="mb-12 lg:mb-16">
+        <div className="mb-8 lg:mb-12">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="artists-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Meet Our Talented Artists

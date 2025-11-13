@@ -80,7 +80,7 @@ export default function About() {
     >
       <div className="container-custom">
         {/* Header */}
-        <div className="mb-12 lg:mb-16">
+        <div className="mb-8 lg:mb-12">
           <div className="max-w-3xl">
             <h2 className="about-header-animate text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               We Get What You're Looking For.

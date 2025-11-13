@@ -80,7 +80,7 @@ export default function CTA() {
     <section
       id="cta"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)] relative overflow-hidden"
+      className="py-8 md:py-12 lg:py-16 bg-[var(--color-bg-dark)] relative overflow-hidden z-20"
     >
       {/* Background decorativo con gradiente */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent-gold)]/5 via-transparent to-transparent pointer-events-none" />

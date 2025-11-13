@@ -87,7 +87,7 @@ export default function Hero() {
     <section
       id="home"
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 md:pb-16"
     >
       {/* Overlay oscuro sobre las imágenes */}
       <div

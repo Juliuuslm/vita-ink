@@ -124,7 +124,7 @@ export default function Services() {
         <section
           key={service.id}
           data-service={service.id}
-          className={`py-12 md:py-20 lg:py-24 ${
+          className={`py-8 md:py-12 lg:py-16 ${
             service.bgColor === 'light'
               ? 'bg-[var(--color-bg-light)]'
               : 'bg-[var(--color-bg-dark)]'

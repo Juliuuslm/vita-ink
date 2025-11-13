@@ -1,7 +1,7 @@
 /**
- * Gallery Section - "A Collection of Artistic Expression and Personal Stories"
- * Scroll horizontal con imágenes cinematográficas (landscape 16:9 / 21:9)
- * Usa ScrollTrigger pin para convertir scroll vertical en desplazamiento horizontal
+ * Gallery Section - Horizontal Scroll Desacoplado
+ * Usa position: fixed + spacer manual para evitar conflictos con Lenis smooth scroll
+ * Esta arquitectura elimina los saltos bruscos al entrar/salir de la sección
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
@@ -10,120 +10,107 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 // 12 imágenes de galería con diferentes aspect ratios cinematográficos
-// Calculamos widths explícitos para asegurar que el scrollWidth sea correcto
 const GALLERY_IMAGES = Array.from({ length: 12 }, (_, i) => {
   const is16by9 = i % 2 === 0;
-  // Para 400px de altura:
-  // 16:9 = 711px ancho
-  // 21:9 = 933px ancho
   return {
     id: i + 1,
     src: `/placeholders/gallery-${i + 1}.webp`,
     alt: `Tattoo work ${i + 1}`,
     aspectRatio: is16by9 ? '16/9' : '21/9',
-    width: is16by9 ? 711 : 933, // widths para 400px altura
+    width: is16by9 ? 711 : 933,
   };
 });
 
 export default function Gallery() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const spacerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current || !trackRef.current) return;
+    if (!spacerRef.current || !containerRef.current || !trackRef.current) return;
 
-    // Esperar a que todas las imágenes carguen antes de medir
-    const waitImagesLoaded = async (container: HTMLElement) => {
-      const images = Array.from(container.querySelectorAll('img'));
-      await Promise.all(
-        images.map((img) => {
-          if (img.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            img.addEventListener('load', resolve, { once: true });
-            img.addEventListener('error', resolve, { once: true });
-          });
-        })
-      );
-    };
+    const spacer = spacerRef.current;
+    const container = containerRef.current;
+    const track = trackRef.current;
 
-    const setupAnimation = async () => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
-      if (!section || !track) return;
+    // Acceder a Lenis si está disponible
+    const lenis = (window as any).lenis;
 
-      // Esperar a que las imágenes carguen
-      await waitImagesLoaded(track);
+    const ctx = gsap.context(() => {
+      // Header fade-in animation
+      gsap.from(headerRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: spacer,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      });
 
-      // Crear contexto GSAP para cleanup fácil
-      const ctx = gsap.context(() => {
-        // Header fade-in
-        gsap.from('.gallery-header-animate', {
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power3.out',
+      // Calcular distancia de scroll horizontal
+      const getScrollAmount = () => {
+        const trackWidth = track.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        const distance = Math.max(0, trackWidth - viewportWidth);
+
+        console.log('[Gallery] Scroll calculation:', {
+          trackWidth,
+          viewportWidth,
+          distance,
+        });
+
+        return -distance;
+      };
+
+      const scrollAmount = getScrollAmount();
+
+      // Solo crear animación si hay contenido que scrollear
+      if (scrollAmount < 0) {
+        const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            trigger: spacer,
+            start: 'top top',
+            end: () => `+=${Math.abs(scrollAmount) * 1.5}`, // 1.5x para dar más espacio de scroll
+            scrub: 1,
+            pin: container,
+            pinSpacing: false, // Usamos spacer manual, no automático
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+
+            // Control de Lenis smooth scroll
+            onEnter: () => {
+              console.log('[Gallery] Entrando - pausando Lenis');
+              lenis?.stop();
+            },
+            onLeave: () => {
+              console.log('[Gallery] Saliendo - reactivando Lenis');
+              lenis?.start();
+            },
+            onEnterBack: () => {
+              console.log('[Gallery] Re-entrando - pausando Lenis');
+              lenis?.stop();
+            },
+            onLeaveBack: () => {
+              console.log('[Gallery] Saliendo hacia atrás - reactivando Lenis');
+              lenis?.start();
+            },
           },
         });
 
-        // Calcular la distancia total de scroll horizontal
-        const getDistance = () => {
-          const trackWidth = track.scrollWidth;
-          const viewportWidth = window.innerWidth;
-          const distance = Math.max(0, trackWidth - viewportWidth);
+        tl.to(track, {
+          x: getScrollAmount,
+          ease: 'none',
+        });
 
-          // Debug info
-          console.log('[Gallery ScrollTrigger]', {
-            trackWidth,
-            viewportWidth,
-            distance,
-            willScroll: distance > 0
-          });
-
-          return distance;
-        };
-
-        const distance = getDistance();
-
-        // Solo crear animación si hay contenido que scrollear
-        if (distance > 0) {
-          const animation = gsap.to(track, {
-            x: () => -getDistance(),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 5%', // Buffer de entrada para transición suave
-              end: () => `+=${getDistance() + window.innerHeight * 0.2}`, // Buffer de salida (20vh)
-              scrub: 1, // Balance entre suavidad y responsividad
-              pin: true,
-              pinSpacing: true, // CRÍTICO: true previene doble scroll
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              markers: false, // Desactivado para producción
-              onUpdate: (self) => {
-                console.log('[ScrollTrigger] Progress:', self.progress);
-              }
-            },
-          });
-
-          console.log('[Gallery] ScrollTrigger animation created');
-        } else {
-          console.warn('[Gallery] No se creó animación - distance:', distance);
-        }
-      }, section);
-
-      // Cleanup
-      return () => ctx.revert();
-    };
-
-    let cleanup: (() => void) | undefined;
-    setupAnimation().then((fn) => {
-      cleanup = fn;
-    });
+        console.log('[Gallery] Animación horizontal creada');
+      } else {
+        console.warn('[Gallery] No se creó animación - scrollAmount:', scrollAmount);
+      }
+    }, container);
 
     // Recalcular en resize
     const handleResize = () => {
@@ -132,72 +119,80 @@ export default function Gallery() {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      cleanup?.();
+      ctx.revert();
       window.removeEventListener('resize', handleResize);
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.trigger === sectionRef.current) st.kill();
-      });
+      lenis?.start(); // Asegurar que Lenis esté activo al desmontar
     };
   }, []);
 
   return (
-    <section
-      id="gallery"
-      ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-light)] overflow-hidden pb-16 lg:pb-20"
-    >
-      {/* Header dentro del container */}
-      <div className="container-custom">
-        <div className="mb-12 lg:mb-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="gallery-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-6">
-              GALLERY
-            </h2>
-            <p className="gallery-header-animate text-lg md:text-xl text-[var(--color-text-dark)]/80">
-              A Collection of Artistic Expression and Personal Stories
-            </p>
+    <>
+      {/* Spacer manual para controlar el espacio de scroll */}
+      <div
+        ref={spacerRef}
+        id="gallery"
+        className="w-full bg-[var(--color-bg-light)]"
+        style={{ height: 'calc(100vh * 2.5)' }}
+        aria-label="Gallery scroll section"
+      />
+
+      {/* Container fixed que se hace pin */}
+      <div
+        ref={containerRef}
+        className="fixed top-0 left-0 w-full h-screen bg-[var(--color-bg-light)] overflow-hidden z-10"
+      >
+        {/* Header */}
+        <div
+          ref={headerRef}
+          className="absolute top-0 left-0 w-full pt-20 md:pt-24 pb-8 z-20 pointer-events-none"
+        >
+          <div className="container-custom">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-4">
+                GALLERY
+              </h2>
+              <p className="text-lg md:text-xl text-[var(--color-text-dark)]/80">
+                A Collection of Artistic Expression and Personal Stories
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Track de scroll horizontal FUERA del container (full-width) */}
-      <div className="relative">
-        <div
-          ref={trackRef}
-          className="gallery-track flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16"
-        >
-          {GALLERY_IMAGES.map((image, index) => (
-            <div
-              key={image.id}
-              className="flex-shrink-0 w-[85vw] sm:w-[400px] md:w-[500px] lg:w-auto"
-              style={{ maxWidth: `${image.width}px` }}
-            >
-              {/* Altura fija con width responsive para scroll horizontal */}
+        {/* Track horizontal - centrado verticalmente */}
+        <div className="absolute inset-0 flex items-center">
+          <div
+            ref={trackRef}
+            className="flex gap-6 md:gap-8 will-change-transform px-6 md:px-12 lg:px-16"
+          >
+            {GALLERY_IMAGES.map((image) => (
               <div
-                className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
-                style={{
-                  aspectRatio: image.aspectRatio,
-                }}
+                key={image.id}
+                className="flex-shrink-0"
+                style={{ width: `${image.width}px` }}
               >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  loading={index < 3 ? "eager" : "lazy"}
-                />
-                {/* Overlay hover */}
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div
+                  className="relative h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden group"
+                  style={{ aspectRatio: image.aspectRatio }}
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    loading="eager"
+                  />
+                  {/* Overlay hover */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Indicador de scroll */}
-        <div className="mt-8 text-center text-sm text-[var(--color-text-dark)]/60 px-6">
-          <span className="hidden md:inline">↓ Scroll para explorar la galería →</span>
-          <span className="md:hidden">← Desliza para explorar →</span>
+        <div className="absolute bottom-8 left-0 w-full text-center text-sm text-[var(--color-text-dark)]/60 pointer-events-none">
+          ↓ Scroll para explorar la galería →
         </div>
       </div>
-    </section>
+    </>
   );
 }
