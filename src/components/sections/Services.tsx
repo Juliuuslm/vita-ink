@@ -124,7 +124,7 @@ export default function Services() {
         <section
           key={service.id}
           data-service={service.id}
-          className={`section-spacing ${
+          className={`py-12 md:py-20 lg:py-24 ${
             service.bgColor === 'light'
               ? 'bg-[var(--color-bg-light)]'
               : 'bg-[var(--color-bg-dark)]'
@@ -185,7 +185,7 @@ export default function Services() {
                     {service.decorativeImages.map((img, idx) => (
                       <div
                         key={idx}
-                        className="w-[120px] h-[120px] rounded-lg overflow-hidden"
+                        className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-lg overflow-hidden"
                       >
                         <img
                           src={img}

@@ -80,7 +80,7 @@ export default function CTA() {
     <section
       id="cta"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)] relative overflow-hidden z-20"
+      className="section-spacing bg-[var(--color-bg-dark)] relative overflow-hidden"
     >
       {/* Background decorativo con gradiente */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent-gold)]/5 via-transparent to-transparent pointer-events-none" />
@@ -119,7 +119,7 @@ export default function CTA() {
               variant="primary"
               size="large"
               href="#contact"
-              className="text-lg md:text-xl px-10 py-5 inline-flex items-center gap-3"
+              className="text-base md:text-lg lg:text-xl px-6 md:px-10 py-5 inline-flex items-center gap-3"
             >
               Connect Now
               <svg

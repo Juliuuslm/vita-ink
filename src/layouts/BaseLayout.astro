@@ -54,6 +54,14 @@ const canonicalURL = Astro.site
     <!-- Preconnect para Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload para imagen crítica del Hero (LCP optimization) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/placeholders/hero-col-1a.webp"
+      type="image/webp"
+    />
   </head>
 
   <body>

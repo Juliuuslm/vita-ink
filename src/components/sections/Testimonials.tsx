@@ -75,14 +75,21 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)] relative z-20"
+      className="section-spacing bg-[var(--color-bg-dark)]"
     >
       <div className="container-custom">
         <div className="testimonials-content max-w-4xl mx-auto">
+          {/* Badge "Featured Reviews" */}
+          <div className="text-center mb-8">
+            <span className="inline-block px-6 py-2 bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] rounded-full text-sm font-bold uppercase tracking-wider">
+              Featured Reviews
+            </span>
+          </div>
+
           {/* Slide actual */}
           <div
             ref={slideRef}
-            className="testimonial-slide bg-[var(--color-bg-dark)] rounded-3xl p-8 md:p-12 lg:p-16"
+            className="testimonial-slide bg-[var(--color-bg-dark)] rounded-3xl p-8 md:p-12 lg:p-16 border-2 border-[var(--color-accent-gold)] shadow-2xl shadow-[var(--color-accent-gold)]/20 ring-4 ring-[var(--color-accent-gold)]/10"
           >
             {/* Estrellas de rating */}
             <div className="flex justify-center gap-2 mb-8">
@@ -112,6 +119,7 @@ export default function Testimonials() {
                   src={currentTestimonial.image}
                   alt={currentTestimonial.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
               <div className="text-center">
@@ -131,7 +139,7 @@ export default function Testimonials() {
             <button
               onClick={handlePrev}
               aria-label="Previous testimonial"
-              className="w-12 h-12 rounded-full border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)] transition-all duration-300 flex items-center justify-center"
+              className="w-14 h-14 sm:w-12 sm:h-12 rounded-full border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)] transition-all duration-300 flex items-center justify-center"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -163,7 +171,7 @@ export default function Testimonials() {
             <button
               onClick={handleNext}
               aria-label="Next testimonial"
-              className="w-12 h-12 rounded-full border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)] transition-all duration-300 flex items-center justify-center"
+              className="w-14 h-14 sm:w-12 sm:h-12 rounded-full border-2 border-[var(--color-accent-gold)] text-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-dark)] transition-all duration-300 flex items-center justify-center"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path

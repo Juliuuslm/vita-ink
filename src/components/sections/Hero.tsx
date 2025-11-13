@@ -96,22 +96,22 @@ export default function Hero() {
       />
 
       {/* Contenedor de columnas con overflow hidden */}
-      <div className="absolute inset-0 flex gap-2 sm:gap-4 overflow-hidden">
+      <div className="absolute inset-0 flex gap-3 sm:gap-4 overflow-hidden">
         {COLUMNS.map((column) => (
           <div
             key={column.id}
             data-column={column.id}
-            className="flex-1 flex flex-col gap-2 sm:gap-4 will-change-transform"
+            className="flex-1 flex flex-col gap-3 sm:gap-4 will-change-transform"
           >
             {/* Primera lista de imágenes */}
-            {column.images.map((img) => (
+            {column.images.map((img, index) => (
               <div key={`${img}-first`} className="relative w-full aspect-[3/4] flex-shrink-0">
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
                     src={`/placeholders/${img}.webp`}
                     alt={`Hero image ${img}`}
                     className="w-full h-full object-cover"
-                    loading="eager"
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function Hero() {
         ref={contentRef}
         className="relative z-20 container-custom text-center"
       >
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-snug lg:leading-tight">
           Every tattoo should
           <br />
           <span className="text-[var(--color-accent-gold)]">

@@ -76,7 +76,7 @@ export default function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-light)] relative z-20"
+      className="section-spacing bg-[var(--color-bg-light)]"
     >
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
