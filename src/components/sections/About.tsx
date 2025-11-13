@@ -30,6 +30,13 @@ const ABOUT_ITEMS = [
     image: '/placeholders/about-3.webp',
     imageWidth: 608,
   },
+  {
+    id: 4,
+    title: "Free Consultation. Always.",
+    description: "Talk with our artists about your vision. We'll help bring your ideas to life — no commitment required. Let's explore what's possible together.",
+    image: '/placeholders/about-1.webp',
+    imageWidth: 400,
+  },
 ];
 
 export default function About() {
@@ -76,7 +83,11 @@ export default function About() {
     <section
       id="about-us"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-light)] text-[var(--color-text-dark)]"
+      className="section-spacing bg-[var(--color-bg-light)] text-[var(--color-text-dark)] relative overflow-hidden"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        backgroundPosition: 'right center',
+      }}
     >
       <div className="container-custom">
         {/* Header */}
@@ -165,6 +176,27 @@ export default function About() {
               </h3>
               <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
                 {ABOUT_ITEMS[2].description}
+              </p>
+            </div>
+
+            {/* Item 4 - Nueva card */}
+            <div
+              data-about-item="4"
+              className="flex flex-col max-w-md mx-auto lg:mx-0"
+            >
+              <div className="mb-6 overflow-hidden rounded-2xl">
+                <img
+                  src={ABOUT_ITEMS[3].image}
+                  alt={ABOUT_ITEMS[3].title}
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                {ABOUT_ITEMS[3].title}
+              </h3>
+              <p className="text-base text-[var(--color-text-dark)]/80 leading-relaxed">
+                {ABOUT_ITEMS[3].description}
               </p>
             </div>
           </div>
