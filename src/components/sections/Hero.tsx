@@ -86,13 +86,17 @@ export default function Hero() {
           );
 
           if (columnElement) {
+            // Calcular gap según breakpoint (gap-3 en mobile, sm:gap-4 en desktop)
+            const gap = window.innerWidth >= 640 ? 16 : 12; // sm:gap-4 = 1rem = 16px, gap-3 = 0.75rem = 12px
+
             // Usar scrollHeight para calcular la altura total, luego dividir por 2
-            // porque tenemos contenido duplicado (dos listas idénticas)
+            // IMPORTANTE: scrollHeight NO incluye el gap entre las dos listas, así que lo agregamos
             const totalHeight = (columnElement as HTMLElement).scrollHeight;
-            const contentHeight = totalHeight / 2;
+            const contentHeight = (totalHeight / 2) + gap;
 
             console.log(`[Hero Column ${column.id}]`, {
               totalHeight,
+              gap,
               contentHeight,
               duration: column.duration
             });
@@ -102,8 +106,8 @@ export default function Hero() {
 
             // Animación infinita seamless:
             // - Inicia en y: 0
-            // - Termina en y: -contentHeight (justo donde empieza la segunda lista)
-            // - repeat: -1 hace que vuelva a y: 0 instantáneamente, creando el loop
+            // - Termina en y: -contentHeight (justo donde empieza la segunda lista, incluyendo gap)
+            // - repeat: -1 hace que vuelva a y: 0 instantáneamente, creando el loop sin espacio negro
             gsap.to(columnElement, {
               y: -contentHeight,
               duration: column.duration,
@@ -173,7 +177,11 @@ export default function Hero() {
           >
             {/* Primera lista de imágenes */}
             {column.images.map((img, index) => (
-              <div key={`${img}-first`} className="relative w-full aspect-[3/4] flex-shrink-0">
+              <div
+                key={`${img}-first`}
+                data-list="first"
+                className="relative w-full aspect-[3/4] flex-shrink-0"
+              >
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
                     src={`/placeholders/${img}.webp`}
@@ -186,14 +194,18 @@ export default function Hero() {
             ))}
 
             {/* Segunda lista de imágenes (duplicada para loop infinito) */}
-            {column.images.map((img) => (
-              <div key={`${img}-second`} className="relative w-full aspect-[3/4] flex-shrink-0">
+            {column.images.map((img, index) => (
+              <div
+                key={`${img}-second`}
+                data-list="second"
+                className="relative w-full aspect-[3/4] flex-shrink-0"
+              >
                 <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
                   <img
                     src={`/placeholders/${img}.webp`}
                     alt={`Hero image ${img}`}
                     className="w-full h-full object-cover"
-                    loading="lazy"
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               </div>
