@@ -108,13 +108,13 @@ export default function CTA() {
           </div>
 
           {/* Párrafo descriptivo */}
-          <p className="cta-paragraph text-lg md:text-xl lg:text-2xl text-[var(--color-text-primary)] mb-12 max-w-2xl mx-auto font-light">
+          <p className="cta-paragraph text-lg md:text-xl lg:text-2xl text-[var(--color-text-primary)] mb-12 max-w-2xl mx-auto font-light" style={{ opacity: 1 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc fermentum quis enim eget
             pharetra. Ut mattis malesuada ante quis posuere.
           </p>
 
           {/* CTA Button */}
-          <div className="cta-button-wrapper">
+          <div className="cta-button-wrapper" style={{ opacity: 1 }}>
             <Button
               variant="primary"
               size="large"
