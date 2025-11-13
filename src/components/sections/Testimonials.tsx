@@ -78,7 +78,7 @@ export default function Testimonials() {
       className="py-8 md:py-12 lg:py-16 bg-[var(--color-bg-dark)] relative z-20"
     >
       <div className="container-custom">
-        <div className="testimonials-content max-w-4xl mx-auto">
+        <div className="testimonials-content max-w-4xl mx-auto" style={{ opacity: 1 }}>
           {/* Badge "Featured Reviews" */}
           <div className="text-center mb-8">
             <span className="inline-block px-6 py-2 bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] rounded-full text-sm font-bold uppercase tracking-wider">
@@ -90,6 +90,7 @@ export default function Testimonials() {
           <div
             ref={slideRef}
             className="testimonial-slide bg-[var(--color-bg-dark)] rounded-3xl p-8 md:p-12 lg:p-16 border-2 border-[var(--color-accent-gold)] shadow-2xl shadow-[var(--color-accent-gold)]/20 ring-4 ring-[var(--color-accent-gold)]/10"
+            style={{ opacity: 1 }}
           >
             {/* Estrellas de rating */}
             <div className="flex justify-center gap-2 mb-8">
