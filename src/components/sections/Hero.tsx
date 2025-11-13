@@ -1,6 +1,6 @@
 /**
  * Hero Section con columnas de imágenes con Infinite Vertical Marquee
- * Efecto automático sin vinculación al scroll - basado en el fetch de Soulmark
+ * Efecto automático sin vinculación al scroll - VITA-INK Tattoo Studio
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';

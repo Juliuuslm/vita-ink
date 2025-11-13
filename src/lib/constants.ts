@@ -1,6 +1,6 @@
 /**
- * Constantes del proyecto Soulmark Tattoo Studio
- * Basado en el fetch de: soulmark.webflow.io
+ * Constantes del proyecto VITA-INK Tattoo Studio
+ * Basado en el diseño original de Soulmark
  */
 
 // Colores del diseño (basados en el análisis del fetch)
