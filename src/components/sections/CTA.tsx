@@ -87,9 +87,9 @@ export default function CTA() {
 
       <div className="container-custom relative z-10">
         <div className="max-w-5xl mx-auto text-center">
-          {/* Título principal "THE BEST" */}
+          {/* Título principal "LO MEJOR" */}
           <h2 className="cta-main-title text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-primary)] mb-8">
-            THE BEST
+            LO MEJOR
           </h2>
 
           {/* Contenedor del marquee vertical con texto stroke */}
@@ -109,8 +109,7 @@ export default function CTA() {
 
           {/* Párrafo descriptivo */}
           <p className="cta-paragraph text-lg md:text-xl lg:text-2xl text-[var(--color-text-primary)] mb-12 max-w-2xl mx-auto font-light" style={{ opacity: 1 }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc fermentum quis enim eget
-            pharetra. Ut mattis malesuada ante quis posuere.
+            Somos más que un estudio de tatuajes. Somos un espacio donde tus ideas cobran vida, donde la creatividad se encuentra con la precisión y donde cada marca en tu piel cuenta una historia única que solo tú posees.
           </p>
 
           {/* CTA Button */}
@@ -121,7 +120,7 @@ export default function CTA() {
               href="#contact"
               className="text-base md:text-lg lg:text-xl px-6 md:px-10 py-5 inline-flex items-center gap-3"
             >
-              Connect Now
+              Contáctanos
               <svg
                 className="w-6 h-6"
                 fill="none"

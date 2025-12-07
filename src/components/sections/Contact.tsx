@@ -146,7 +146,7 @@ export default function Contact() {
           <div className="contact-content-animate" style={{ opacity: 1 }}>
             <div className="mb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-4">
-                Ready to Start Your Tattoo Journey?
+                ¿Listo para Empezar tu Viaje del Tatuaje?
               </h2>
             </div>
 
@@ -158,7 +158,7 @@ export default function Contact() {
                     htmlFor="name"
                     className="block text-sm font-medium text-[var(--color-text-dark)] mb-2"
                   >
-                    Name
+                    Nombre
                   </label>
                   <input
                     type="text"
@@ -176,7 +176,7 @@ export default function Contact() {
                     htmlFor="email"
                     className="block text-sm font-medium text-[var(--color-text-dark)] mb-2"
                   >
-                    Email
+                    Correo
                   </label>
                   <input
                     type="email"
@@ -196,7 +196,7 @@ export default function Contact() {
                   htmlFor="message"
                   className="block text-sm font-medium text-[var(--color-text-dark)] mb-2"
                 >
-                  Message
+                  Mensaje
                 </label>
                 <textarea
                   id="message"
@@ -205,7 +205,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  placeholder="Type your message..."
+                  placeholder="Escribe tu mensaje..."
                   className="w-full px-4 py-3 rounded-lg border-2 border-[var(--color-text-dark)]/20 focus:border-[var(--color-accent-gold)] focus:outline-none transition-colors resize-none bg-white text-[var(--color-text-dark)] placeholder:text-[var(--color-text-dark)]/40"
                 />
               </div>
@@ -225,7 +225,7 @@ export default function Contact() {
                   htmlFor="terms"
                   className="text-sm text-[var(--color-text-dark)] cursor-pointer"
                 >
-                  I accept the Terms
+                  Acepto los Términos
                 </label>
               </div>
 
@@ -237,7 +237,7 @@ export default function Contact() {
                   size="large"
                   className="w-full md:w-auto"
                 >
-                  Book Now
+                  Reservar Ahora
                 </Button>
               </div>
 
@@ -245,7 +245,7 @@ export default function Contact() {
               {formStatus === 'success' && (
                 <div className="p-4 rounded-lg bg-green-100 border-2 border-green-500">
                   <p className="text-green-700 font-medium">
-                    Thank you! Your submission has been received!
+                    ¡Gracias! Hemos recibido tu mensaje.
                   </p>
                 </div>
               )}
@@ -254,7 +254,7 @@ export default function Contact() {
               {formStatus === 'error' && (
                 <div className="p-4 rounded-lg bg-red-100 border-2 border-red-500">
                   <p className="text-red-700 font-medium">
-                    Oops! Something went wrong while submitting the form.
+                    ¡Oops! Algo salió mal al enviar el formulario.
                   </p>
                 </div>
               )}

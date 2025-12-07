@@ -187,10 +187,10 @@ export default function Gallery() {
         <div className="mb-12 lg:mb-16">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="gallery-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-6">
-              GALLERY
+              GALERÍA
             </h2>
             <p className="gallery-header-animate text-lg md:text-xl text-[var(--color-text-dark)]/80">
-              A Collection of Artistic Expression and Personal Stories
+              Una Colección de Expresión Artística e Historias Personales
             </p>
           </div>
         </div>

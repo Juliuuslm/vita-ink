@@ -11,29 +11,29 @@ gsap.registerPlugin(ScrollTrigger);
 const ABOUT_ITEMS = [
   {
     id: 1,
-    title: "No Idea? We'll Help You Create One.",
-    description: "That's what we're here for. You'll collaborate one-on-one with an artist who helps bring your ideas to life — or create something from scratch that fits your vibe perfectly.",
+    title: "¿Sin idea? Te ayudamos a crear una.",
+    description: "Para eso estamos aquí. Colaborarás uno a uno con un artista que te ayuda a traer tus ideas a la vida — o creamos algo desde cero que encaje perfecto con tu estilo.",
     image: '/placeholders/about-1.webp',
     imageWidth: 400,
   },
   {
     id: 2,
-    title: "First Tattoo? We'll Walk You Through It.",
-    description: "We've got you. Our artists take the time to explain everything — from the pain level to aftercare — so you feel confident and comfortable before we even pick up the needle.",
+    title: "¿Tu primer tatuaje? Te guiamos paso a paso.",
+    description: "Tranquilo, te tenemos cubierto. Nuestros artistas dedican tiempo a explicarte todo — desde el nivel de dolor hasta los cuidados posteriores — para que te sientas seguro y cómodo antes de que ni siquiera toquemos la aguja.",
     image: '/placeholders/about-2.webp',
     imageWidth: 400,
   },
   {
     id: 3,
-    title: "Worried About Safety? We're Obsessed With It.",
-    description: "Your health is our priority. We use top-grade, sterile equipment and maintain studio hygiene that exceeds industry standards — always.",
+    title: "¿Preocupado por la seguridad? Es nuestra obsesión.",
+    description: "Tu salud es nuestra prioridad. Usamos equipos de grado superior, esterilizados y mantenemos una higiene que supera los estándares de la industria — siempre.",
     image: '/placeholders/about-3.webp',
     imageWidth: 608,
   },
   {
     id: 4,
-    title: "Free Consultation. Always.",
-    description: "Talk with our artists about your vision. We'll help bring your ideas to life — no commitment required. Let's explore what's possible together.",
+    title: "Consulta gratuita. Siempre.",
+    description: "Conversa con nuestros artistas sobre tu visión. Te ayudamos a traer tus ideas a la vida — sin compromisos. Exploremos juntos qué es posible.",
     image: '/placeholders/about-1.webp',
     imageWidth: 400,
   },
@@ -94,19 +94,19 @@ export default function About() {
         <div className="mb-8 lg:mb-12">
           <div className="max-w-3xl">
             <h2 className="about-header-animate text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              We Get What You're Looking For.
+              Entendemos lo que Buscas.
             </h2>
             <p className="about-header-animate text-lg md:text-xl text-[var(--color-text-dark)]/80 mb-8">
-              At our tattoo studio, we believe every tattoo tells a story. Our
-              artists are dedicated to bringing your vision to life with
-              precision and creativity.
+              En nuestro estudio creemos que cada tatuaje cuenta una historia. Nuestros
+              artistas se dedican a traer tu visión a la vida con
+              precisión y creatividad.
             </p>
             <div className="about-header-animate">
               <a
                 href="#contact"
                 className="inline-block bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] px-8 py-4 rounded-full font-semibold hover:bg-[var(--color-accent-gold-hover)] transition-all duration-300 hover:-translate-y-1"
               >
-                Let's Get Started
+                Empecemos
               </a>
             </div>
           </div>
