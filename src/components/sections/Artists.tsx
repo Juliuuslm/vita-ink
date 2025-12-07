@@ -52,7 +52,7 @@ export default function Artists() {
     <section
       id="artists"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)]"
+      className="pb-[var(--spacing-section-mobile)] md:pb-[var(--spacing-section)] bg-[var(--color-bg-dark)]"
     >
       <div className="container-custom">
         {/* Header */}

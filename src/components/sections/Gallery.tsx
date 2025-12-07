@@ -132,12 +132,12 @@ export default function Gallery() {
             ease: 'none',
             scrollTrigger: {
               trigger: section,
-              start: 'top 5%', // Buffer de entrada para transición suave
-              end: () => `+=${getDistance() + window.innerHeight * 0.2}`, // Buffer de salida (20vh)
+              start: 'top 20%', // Buffer de entrada para transición suave
+              end: () => `+=${getDistance() + window.innerHeight * 0.1}`, // Buffer de salida (10vh)
               scrub: 1, // Balance entre suavidad y responsividad
               pin: true,
               pinSpacing: true, // CRÍTICO: true previene doble scroll
-              anticipatePin: 1,
+              anticipatePin: 0,
               invalidateOnRefresh: true,
               markers: false, // Desactivado para producción
               onUpdate: (self) => {
