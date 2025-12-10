@@ -227,17 +227,17 @@ export default function Hero() {
         className="relative z-20 container-custom text-center"
       >
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-snug lg:leading-tight">
-          Every tattoo should
+          Cada tatuaje debe
           <br />
           <span className="text-[var(--color-accent-gold)]">
-            mean something.
+            significar algo.
           </span>
         </h1>
 
         <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-10">
-          At our tattoo studio, we create custom designs that showcase your
-          individuality, ensuring a safe and comfortable experience with our
-          talented artists.
+          En nuestro estudio creamos diseños personalizados que reflejan tu
+          individualidad, garantizando una experiencia segura y cómoda con
+          nuestros talentosos artistas.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -245,13 +245,13 @@ export default function Hero() {
             href="#contact"
             className="inline-block bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] px-8 py-4 rounded-full font-semibold hover:bg-[var(--color-accent-gold-hover)] transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto text-center"
           >
-            I'm Ready!
+            ¡Estoy Listo/a!
           </a>
           <a
             href="#gallery"
             className="inline-block bg-white text-[var(--color-bg-dark)] px-8 py-4 rounded-full font-semibold hover:bg-[var(--color-accent-gold)] transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto text-center"
           >
-            Browse Work
+            Ver Trabajos
           </a>
         </div>
       </div>

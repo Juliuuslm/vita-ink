@@ -52,19 +52,19 @@ export default function Artists() {
     <section
       id="artists"
       ref={sectionRef}
-      className="section-spacing bg-[var(--color-bg-dark)]"
+      className="pb-[var(--spacing-section-mobile)] md:pb-[var(--spacing-section)] bg-[var(--color-bg-dark)]"
     >
       <div className="container-custom">
         {/* Header */}
         <div className="mb-8 lg:mb-12">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="artists-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Meet Our Talented Artists
+              Conoce a Nuestros Artistas
             </h2>
             <p className="artists-header-animate text-lg md:text-xl text-white/80">
-              Get ready to discover the incredibly talented artists who will
-              bring your next tattoo idea to life with their unique skills and
-              creativity.
+              Prepárate para conocer los talentosos artistas que traerán
+              tu próxima idea de tatuaje a la vida con sus habilidades únicas y
+              creatividad.
             </p>
           </div>
         </div>

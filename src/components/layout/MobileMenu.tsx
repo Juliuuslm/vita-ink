@@ -73,7 +73,7 @@ export default function MobileMenu() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden relative z-[60] w-10 h-10 flex flex-col justify-center items-center gap-1.5"
-        aria-label="Toggle menu"
+        aria-label="Abrir menú"
       >
         <span
           className={`block w-6 h-0.5 bg-[var(--color-accent-gold)] transition-all duration-300 ${
@@ -126,7 +126,7 @@ export default function MobileMenu() {
               onClick={handleLinkClick}
               className="block w-full text-center bg-[var(--color-accent-gold)] text-[var(--color-bg-dark)] py-3 px-6 rounded-full font-semibold hover:bg-[var(--color-accent-gold-hover)] transition-colors duration-300"
             >
-              Book Now
+              Reservar
             </a>
           </div>
         </div>

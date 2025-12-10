@@ -124,7 +124,9 @@ export default function Services() {
         <section
           key={service.id}
           data-service={service.id}
-          className={`py-8 md:py-12 lg:py-16 ${
+          className={`section-spacing ${
+            service.id !== 'full-coverage' ? 'pb-[15vh]' : ''
+          } ${
             service.bgColor === 'light'
               ? 'bg-[var(--color-bg-light)]'
               : 'bg-[var(--color-bg-dark)]'

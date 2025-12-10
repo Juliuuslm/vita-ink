@@ -132,12 +132,12 @@ export default function Gallery() {
             ease: 'none',
             scrollTrigger: {
               trigger: section,
-              start: 'top 5%', // Buffer de entrada para transición suave
-              end: () => `+=${getDistance() + window.innerHeight * 0.2}`, // Buffer de salida (20vh)
+              start: 'top 20%', // Buffer de entrada para transición suave
+              end: () => `+=${getDistance() + window.innerHeight * 0.1}`, // Buffer de salida (10vh)
               scrub: 1, // Balance entre suavidad y responsividad
               pin: true,
               pinSpacing: true, // CRÍTICO: true previene doble scroll
-              anticipatePin: 1,
+              anticipatePin: 0,
               invalidateOnRefresh: true,
               markers: false, // Desactivado para producción
               onUpdate: (self) => {
@@ -187,10 +187,10 @@ export default function Gallery() {
         <div className="mb-12 lg:mb-16">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="gallery-header-animate text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-dark)] mb-6">
-              GALLERY
+              GALERÍA
             </h2>
             <p className="gallery-header-animate text-lg md:text-xl text-[var(--color-text-dark)]/80">
-              A Collection of Artistic Expression and Personal Stories
+              Una Colección de Expresión Artística e Historias Personales
             </p>
           </div>
         </div>

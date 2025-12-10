@@ -29,45 +29,45 @@ export const FONTS = {
 
 // Navegación del sitio
 export const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'About us', href: '#about-us' },
-  { label: 'Offerings', href: '#offerings' },
-  { label: 'Artists', href: '#artists' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Testimonials', href: '#testimonials' },
+  { label: 'Inicio', href: '#home' },
+  { label: 'Nosotros', href: '#about-us' },
+  { label: 'Servicios', href: '#offerings' },
+  { label: 'Artistas', href: '#artists' },
+  { label: 'Galería', href: '#gallery' },
+  { label: 'Testimonios', href: '#testimonials' },
 ] as const;
 
 // Servicios ofrecidos
 export const SERVICES = [
   {
     id: 'temporary',
-    title: 'Temporary tattoos',
-    description: 'Temporary tattoos are a great way to experiment with body art without making a permanent commitment. They are ideal for special events, short-term style changes, or testing out designs before getting inked.',
-    cta: 'Try it on',
+    title: 'Tatuajes Temporales',
+    description: 'Los tatuajes temporales son una excelente forma de experimentar con el arte corporal sin comprometerte a nada permanente. Ideales para eventos especiales, cambios de estilo a corto plazo o para probar diseños antes de tatuarte definitivamente.',
+    cta: 'Pruébalo',
     image: '/placeholders/service-temporary.webp',
     bgColor: 'light',
   },
   {
     id: 'minimal',
-    title: 'Minimal tattoos',
-    description: 'Minimal tattoos focus on simplicity and elegance. They use clean lines, small symbols, and subtle detail to create timeless designs that are perfect for those who prefer a more understated look.',
-    cta: 'Start Simple',
+    title: 'Tatuajes Minimalistas',
+    description: 'Los tatuajes minimalistas se enfocan en la simplicidad y elegancia. Usan líneas limpias, símbolos pequeños y detalles sutiles para crear diseños atemporales que son perfectos para quienes prefieren un look más discreto.',
+    cta: 'Empecemos Simple',
     image: '/placeholders/service-minimal.webp',
     bgColor: 'dark',
   },
   {
     id: 'lettering',
-    title: 'Lettering Tattoos',
-    description: 'Lettering tattoos feature meaningful words, names, or quotes expressed through custom fonts and creative typography. They are a powerful way to carry a message, emotion, or personal story with you.',
-    cta: 'Design Yours',
+    title: 'Tatuajes de Lettering',
+    description: 'Los tatuajes de lettering presentan palabras significativas, nombres o frases expresadas a través de tipografías personalizadas y creativas. Una forma poderosa de llevar un mensaje, emoción o historia personal contigo.',
+    cta: 'Diseña el Tuyo',
     image: '/placeholders/service-lettering.webp',
     bgColor: 'light',
   },
   {
     id: 'full-coverage',
-    title: 'Full Coverage Tattoo',
-    description: 'Full coverage tattoos are large-scale artworks that span significant areas of the body. These comprehensive designs tell complete stories and showcase the pinnacle of tattoo artistry.',
-    cta: 'Go Big',
+    title: 'Cobertura Completa',
+    description: 'Los tatuajes de cobertura completa son obras de arte a gran escala que ocupan áreas significativas del cuerpo. Estos diseños completos cuentan historias enteras y muestran el pico del arte del tatuaje.',
+    cta: 'A lo Grande',
     image: '/placeholders/service-full.webp',
     bgColor: 'dark',
   },
@@ -78,25 +78,25 @@ export const ARTISTS = [
   {
     id: 'alex-morgan',
     name: 'Alex Morgan',
-    role: 'Lead Artist',
+    role: 'Artista Principal',
     image: '/placeholders/team-alex.webp',
   },
   {
     id: 'jordan-lee',
     name: 'Jordan Lee',
-    role: 'Tattoo Artist',
+    role: 'Tatuador/a',
     image: '/placeholders/team-jordan.webp',
   },
   {
     id: 'sam-taylor',
     name: 'Sam Taylor',
-    role: 'Apprentice Artist',
+    role: 'Artista Aprendiz',
     image: '/placeholders/team-sam.webp',
   },
   {
     id: 'riley-chen',
     name: 'Riley Chen',
-    role: 'Guest Artist',
+    role: 'Artista Invitado/a',
     image: '/placeholders/team-riley.webp',
   },
 ] as const;
@@ -106,35 +106,35 @@ export const TESTIMONIALS = [
   {
     id: 1,
     name: 'Terry Hintz',
-    role: 'Customer',
+    role: 'Cliente',
     rating: 5,
-    quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
+    quote: 'Fue mi primer tatuaje y estaba nerviosísimo. Pero desde el momento que entré al estudio, todo cambió. Los artistas fueron super profesionales y me hicieron sentir completamente cómodo. Mi tatuaje quedó exactamente como lo imaginaba. ¡Volveré sin dudarlo!',
     image: '/placeholders/testimonial-1.webp',
   },
   {
     id: 2,
     name: 'Al Cummings',
-    role: 'Customer',
+    role: 'Cliente',
     rating: 5,
-    quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
+    quote: 'Llevaba una idea en la cabeza desde hace años y no sabía si podría hacerse realidad. Estos artistas no solo entendieron mi visión, sino que la mejoraron. El proceso fue fluido, limpio y profesional. Mi tatuaje es una obra maestra. ¡Simplemente increíble!',
     image: '/placeholders/testimonial-2.webp',
   },
   {
     id: 3,
     name: 'Esther Bernhard',
-    role: 'Customer',
+    role: 'Cliente',
     rating: 5,
-    quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus.',
+    quote: 'Lo que más me impactó fue la higiene y seguridad del estudio. Es claro que se toman su trabajo muy en serio. El ambiente es relajado, la atención al detalle es insuperable y los artistas realmente se preocupan por su trabajo. Totalmente recomendado para quien quiera un tatuaje de calidad.',
     image: '/placeholders/testimonial-3.webp',
   },
 ] as const;
 
 // Información de contacto
 export const CONTACT_INFO = {
-  address: 'Level 1, 12 Sample St, Sydney NSW 2000',
-  phone: '1800 123 4567',
-  email: 'info@tattoostudio.com',
-  mapsUrl: 'https://maps.google.com/?q=Level+1,+12+Sample+St,+Sydney+NSW+2000',
+  address: 'Calle Principal 123, Zona Rosa, CDMX',
+  phone: '+52 55 1234 5678',
+  email: 'contacto@vitaink.mx',
+  mapsUrl: 'https://maps.google.com/?q=Calle+Principal+123,+Zona+Rosa,+CDMX',
 } as const;
 
 // Redes sociales
