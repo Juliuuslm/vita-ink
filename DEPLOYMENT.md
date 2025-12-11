@@ -1,6 +1,6 @@
 # Deployment Guide - VITA-INK
 
-Este proyecto está configurado para desplegarse en **Dokploy** con **Nixpack** o **Railpack**.
+Este proyecto está configurado para desplegarse en **Dokploy** usando **Dockerfile** con arquitectura multi-stage (Node.js + Nginx).
 
 ## Configuración Aplicada (No Intrusiva)
 
@@ -11,11 +11,13 @@ Se han añadido los siguientes archivos de configuración **sin modificar la ló
 | `.npmrc` | Configuración de pnpm (package manager) |
 | `.node-version` | Especifica Node.js 20.17.0 (gestores de versión) |
 | `.nvmrc` | Especifica Node.js 20.17.0 (alternativa nvm) |
-| `.railpackignore` | Archivos a ignorar en build de Railpack |
-| `Procfile` | Define el comando de inicio para Dokploy |
-| `railpack-plan.json` | Configuración explícita para Railpack |
-| `nixpacks.toml` | Configuración explícita para Nixpack (recomendado) |
-| `astro.config.mjs` | Añadido `output: 'static'` para SSG explícito |
+| `Dockerfile` | Build multi-stage: Node.js (build) + Nginx (runtime) |
+| `nginx.conf` | Configuración de Nginx para servir archivos estáticos |
+| `.dockerignore` | Archivos a ignorar en build de Docker |
+| `astro.config.mjs` | Configurado con `output: 'static'` para SSG |
+
+**Archivos heredados (no se usan, kept como backup):**
+| `Procfile`, `railpack-plan.json`, `nixpacks.toml`, `.railpackignore` |
 
 ## Pasos para Desplegar en Dokploy
 
@@ -24,60 +26,65 @@ Se han añadido los siguientes archivos de configuración **sin modificar la ló
 1. **Crear nuevo proyecto**
    - URL del repositorio: Tu repo de GitHub
    - Rama: `main` (o la rama que uses)
-   - **Elegir build pack: Nixpack (RECOMENDADO)**
+   - **Elegir build pack: Dockerfile (RECOMENDADO)**
 
-2. **Configuración Automática**
-   - Dokploy detectará automáticamente:
-     - `nixpacks.toml` para Nixpack (configuración explícita)
-     - `railpack-plan.json` si usas Railpack como alternativa
-     - `Procfile` para el comando de inicio
-     - `.node-version` para la versión de Node.js
+2. **Configuración del Proyecto**
+   - **Build Pack**: Selecciona "Dockerfile"
+   - **Dockerfile Path**: `Dockerfile` (ubicado en la raíz del proyecto)
+   - **Container Port**: `80` (Nginx corre en puerto 80)
+   - **Health Check**: `/health` (endpoint para verificación)
 
 3. **Variables de Entorno** (si aplica)
-   - Añade cualquier variable que necesite tu aplicación
-   - `PORT=3000` se configura automáticamente
+   - No necesitas variables especiales para este setup
+   - Todo está configurado en Dockerfile y nginx.conf
 
 4. **Deploy**
-   - Dokploy construirá la imagen automáticamente
-   - Ejecutará: `pnpm install --frozen-lockfile && pnpm build`
-   - Iniciará con: `pnpm preview` (puerto 3000)
+   - Dokploy construirá automáticamente usando Dockerfile
+   - **Build Stage**: Instala pnpm, instala dependencias, construye Astro
+   - **Runtime Stage**: Usa Nginx para servir archivos estáticos desde `dist/`
+   - **Iniciará con**: Nginx escuchando en puerto 80
 
 ## ¿Por Qué Esta Configuración?
 
-### `.npmrc`
-- Dokploy usa `pnpm` para instalación eficiente de dependencias
-- `shamefully-hoist=true`: Garantiza compatibilidad con dependencias planas
-- `strict-peer-dependencies=false`: Evita errores en instalación de dependencias opcionales
+### `Dockerfile` (Multi-Stage Build)
+El Dockerfile usa **arquitectura multi-stage** para máxima eficiencia:
 
-### `.node-version` y `.nvmrc`
-- Nixpack detecta automáticamente estos archivos para seleccionar la versión de Node.js
-- Evita problemas de compatibilidad entre desarrollo y producción
+**Stage 1 - Build**: Usa `node:20-alpine`
+- Instala pnpm globalmente
+- Instala dependencias del proyecto con `pnpm install --frozen-lockfile`
+- Ejecuta `pnpm build` para construir el sitio estático en `dist/`
+- Este stage se descarta después de construir
 
-### `Procfile`
-- Define el comando que Dokploy ejecutará al iniciar el contenedor
-- `pnpm preview`: Ejecuta el servidor de preview de Astro (ligero y eficiente para SSG)
+**Stage 2 - Runtime**: Usa `nginx:1.25-alpine`
+- Copia solo el `nginx.conf` y la carpeta `dist/` (archivos estáticos)
+- **Imagen final de solo ~30MB** (vs ~200MB con Node.js)
+- Mucho más rápida, segura y eficiente
 
-### `nixpacks.toml` (Recomendado)
-- Configuración explícita y optimizada para **Nixpack**
-- Define paquetes de sistema necesarios (Node.js 20, pnpm)
-- Especifica comandos de build y start
-- Evita problemas de dependencias y timeouts
-- **Esta es la configuración preferida**
+### `nginx.conf` (Configuración de Nginx)
+Nginx está optimizado para servir sitios estáticos:
+- **Root**: `/usr/share/nginx/html` contiene los archivos de `dist/`
+- **Cache headers**:
+  - Archivos hasheados en `/_astro/` → 1 año (safe porque tienen hashes de contenido)
+  - Imágenes → 30 días
+  - HTML → No cache (siempre fresco)
+- **Gzip compression**: Reduce tamaño de CSS/JS ~70%
+- **SPA routing**: `try_files $uri $uri/ /index.html` permite navegación
+- **Security headers**: Protege contra XSS y clickjacking
+- **Health check**: Endpoint `/health` para Dokploy
 
-### `railpack-plan.json`
-- Configuración para **Railpack** como alternativa
-- Solo úsalo si prefieres Railpack en lugar de Nixpack
-- Contiene la misma lógica pero para el formato de Railpack
-
-### `.railpackignore`
-- Especifica qué archivos ignorar durante el build de Railpack
-- Reduce el tamaño de la imagen Docker
-- Excluye archivos de desarrollo innecesarios
+### `.dockerignore`
+- Excluye `node_modules/`, `.git/`, docs, etc.
+- Reduce el contexto de build (más rápido)
+- Evita archivos innecesarios en la imagen
 
 ### `astro.config.mjs` - `output: 'static'`
 - Indica explícitamente que el proyecto es **Static Site Generation (SSG)**
 - Astro generará HTML/CSS/JS pre-construido en la carpeta `dist/`
 - Más seguro y performante en producción
+
+### `.npmrc`, `.node-version`, `.nvmrc`
+- Configuración de desarrollo local
+- Asegura consistencia entre desarrollo y producción (Node.js 20)
 
 ## Alternativa: SSR (Si lo necesitas en el futuro)
 
@@ -96,20 +103,54 @@ Pero para este proyecto, **SSG es lo ideal** (estático, rápido, seguro).
 
 ## Testing Antes de Deploy
 
+### Prueba local con Docker
+
 ```bash
-# Verifica que el build funciona
+# Build la imagen Docker localmente
+docker build -t vita-ink:test .
+
+# Corre el contenedor localmente
+docker run -p 8080:80 vita-ink:test
+
+# Visita http://localhost:8080 en el navegador
+# Deberías ver el sitio VITA-INK completo
+
+# Prueba el health check endpoint
+curl http://localhost:8080/health
+# Debe responder: "healthy"
+
+# Verifica que el routing funciona (SPA fallback)
+curl -I http://localhost:8080/about
+# Debe devolver 200 y servir index.html
+
+# Limpia
+docker stop $(docker ps -q --filter ancestor=vita-ink:test)
+docker rmi vita-ink:test
+```
+
+### Verificar localmente sin Docker
+
+```bash
+# Si no tienes Docker, puedes verificar que el build funciona
+pnpm install --frozen-lockfile
 pnpm build
 
-# Prueba el servidor de preview localmente
-pnpm preview
+# Verifica que se generó la carpeta dist/
+ls -la dist/
+# Deberías ver: index.html, _astro/, placeholders/, etc.
 ```
 
 ## Monitoreo en Dokploy
 
 Una vez desplegado:
 - **Logs**: Revisa los logs de build y runtime en Dokploy
-- **Health Check**: Dokploy verificará que el servidor responda en el puerto 3000 (por defecto)
+- **Health Check**: Dokploy verificará que el servidor responda en `/health`
 - **Redeploys**: Cada push a la rama configurada dispará un nuevo deploy automático
+- **Performance**: Con Nginx, deberías ver:
+  - Build time: 2-3 minutos
+  - Image size: ~30MB
+  - Startup time: <1 segundo
+  - Memory usage: ~5-10MB
 
 ## Rollback
 
@@ -120,36 +161,133 @@ Si algo sale mal:
 
 ## Troubleshooting
 
-### Error: "mise install-into caddy failed" (Railpack)
-**Solución**: Usa **Nixpack** en lugar de Railpack. Nixpack no requiere Caddy.
+### Error: "502 Bad Gateway" en Dokploy
 
-### Error: "Gateway Timeout" en descarga de dependencias
-- Esto puede ocurrir si hay problemas de conectividad
-- Nixpack reintentar automáticamente
-- Si persiste, contacta al proveedor de hosting
+**Causa**: El Dockerfile o puerto no está configurado correctamente.
 
-### Error: "pnpm not found"
-- Verifica que `nixpacks.toml` está en la raíz del proyecto
-- Docploy debería detectar `pnpm-lock.yaml` automáticamente
+**Solución**:
+1. Verifica en Dokploy que:
+   - Build Pack está en "Dockerfile"
+   - Container Port está en "80" (no 3000)
+2. Revisa los logs de build en Dokploy:
+   - Stage 1 debe terminar con "pnpm build"
+   - Stage 2 debe copiar archivos y exponer puerto 80
+3. Testa localmente: `docker build -t test . && docker run -p 8080:80 test`
 
-### Error: "Port already in use"
-- El puerto 3000 se configura automáticamente en `nixpacks.toml`
-- Si necesitas otro puerto, edita el archivo y redeploya
+### Error: "Build failed" o "no such file" en build
 
-### Build falló
-- Revisa los logs completos en Dokploy
-- Asegúrate localmente: `pnpm install --frozen-lockfile && pnpm build && pnpm preview`
-- Verifica que `pnpm-lock.yaml` está committed en Git
+**Causa**: El Dockerfile no encuentra archivos necesarios.
 
-### Sitio blanco / No carga contenido
-- Verifica que la carpeta `dist/` fue generada: `ls -la dist/`
-- Comprueba que `pnpm preview` funciona localmente
-- Revisa los logs del servidor en Dokploy
+**Solución**:
+```bash
+# Verifica que estos archivos existen en la raíz:
+ls -la Dockerfile nginx.conf .dockerignore package.json pnpm-lock.yaml
 
-### ¿Cómo saber cuál es mi build pack?
-En Dokploy, revisa el log de build. Busca:
-- **Nixpack**: "nixpacks building..." o referencias a `nixpacks.toml`
-- **Railpack**: "railpack building..." (no recomendado)
+# Prueba el build localmente
+docker build -t vita-ink:test .
+
+# Si falla, mira el error específico y revisa:
+# - ¿nginx.conf está en el mismo directorio que Dockerfile?
+# - ¿pnpm-lock.yaml está actualizado?
+```
+
+### Error: "Nginx not serving files" o "404 everywhere"
+
+**Causa**: nginx.conf no está configurado correctamente o `dist/` está vacío.
+
+**Solución**:
+1. Verifica que el build generó `dist/`:
+   ```bash
+   docker run --rm vita-ink:test ls -la /usr/share/nginx/html
+   # Deberías ver: index.html, _astro/, placeholders/
+   ```
+
+2. Si `dist/` está vacío, revisa que el build anterior en Stage 1 fue exitoso:
+   ```bash
+   # Mira logs del build en Dokploy
+   # Busca "pnpm build" - debe mostrar "✓ Completed"
+   ```
+
+3. Prueba que nginx.conf es válido:
+   ```bash
+   docker run --rm vita-ink:test nginx -t
+   # Debe mostrar: "syntax is ok"
+   ```
+
+### Error: "Cache headers not working" o "CSS/JS outdated"
+
+**Causa**: El navegador tiene versiones viejas en cache.
+
+**Solución**:
+```bash
+# Verifica las headers desde terminal:
+curl -I https://tu-dominio.com/_astro/index.hash.css
+# Deberías ver: "Cache-Control: public, immutable"
+
+# En navegador, abre DevTools → Network tab:
+# Reload con Ctrl+Shift+R (hard refresh)
+# Las requests a /_astro/ deben tener "from cache"
+```
+
+### Error: "Routing no funciona" (404 en refresh de página)
+
+**Causa**: SPA fallback no está configurado.
+
+**Solución**:
+El nginx.conf ya tiene configurado:
+```nginx
+location / {
+    try_files $uri $uri/ /index.html;
+}
+```
+
+Si sigue fallando, verifica que nginx.conf está siendo usado:
+```bash
+docker run --rm vita-ink:test cat /etc/nginx/nginx.conf
+# Debe mostrar el contenido del archivo nginx.conf
+```
+
+### Error: "Health check failing"
+
+**Causa**: El endpoint `/health` no está respondiendo.
+
+**Solución**:
+```bash
+# Testa el health check localmente
+docker run -p 8080:80 vita-ink:test
+curl http://localhost:8080/health
+# Debe responder: "healthy"
+
+# En Dokploy, desactiva health check temporalmente:
+# Application → Settings → Health Check (desactiva)
+# Luego redeploy y revisa si el sitio carga
+```
+
+### ¿Cómo debuggear Nginx dentro del contenedor?
+
+En Dokploy, accede a la shell del contenedor:
+```bash
+# En terminal de tu máquina (si tienes Docker):
+docker exec -it <container_id> sh
+
+# Dentro del contenedor:
+tail -f /var/log/nginx/access.log    # Ver requests
+tail -f /var/log/nginx/error.log     # Ver errores
+nginx -t                             # Validar config
+ps aux | grep nginx                  # Ver procesos
+```
+
+### Solicita ayuda
+
+Si nada funciona:
+1. Toma screenshot de los logs de build en Dokploy
+2. Haz local test: `docker build . && docker run -p 8080:80 <image>`
+3. Revisa que estos archivos existan:
+   - `Dockerfile` - Build configuration
+   - `nginx.conf` - Nginx configuration
+   - `.dockerignore` - Build context
+   - `package.json` - Dependencies
+   - `pnpm-lock.yaml` - Locked versions
 
 ---
 
