@@ -4,11 +4,8 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Button from '../ui/Button';
 import { CONTACT_INFO } from '../../lib/constants';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);

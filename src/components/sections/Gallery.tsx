@@ -6,9 +6,6 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // 12 imágenes de galería con diferentes aspect ratios cinematográficos
 // Calculamos widths explícitos para asegurar que el scrollWidth sea correcto
@@ -45,6 +42,19 @@ export default function Gallery() {
 
   useEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    let ScrollTrigger: any;
+
+    const initScrollTrigger = async () => {
+      const module = await import('gsap/ScrollTrigger');
+      ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    };
+
+    initScrollTrigger().catch(() => {
+      console.warn('[Gallery] ScrollTrigger initialization failed');
+    });
 
     // En móvil, no aplicar ScrollTrigger horizontal
     if (isMobile) {

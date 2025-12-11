@@ -4,9 +4,6 @@
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const ABOUT_ITEMS = [
   {
@@ -44,6 +41,14 @@ export default function About() {
 
   useEffect(() => {
     if (!sectionRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {
+      console.warn('[About] ScrollTrigger initialization failed');
+    });
 
     const ctx = gsap.context(() => {
       // Animación para el header (título, descripción, botón)

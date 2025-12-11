@@ -4,10 +4,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { TESTIMONIALS } from '../../lib/constants';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Testimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -28,6 +25,14 @@ export default function Testimonials() {
   // Animación de entrada de la sección
   useEffect(() => {
     if (!sectionRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {
+      console.warn('[Testimonials] ScrollTrigger initialization failed');
+    });
 
     const ctx = gsap.context(() => {
       gsap.from('.testimonials-content', {
