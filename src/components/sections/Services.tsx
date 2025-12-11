@@ -4,9 +4,6 @@
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface Service {
   id: string;
@@ -79,6 +76,14 @@ export default function Services() {
 
   useEffect(() => {
     if (!servicesRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {
+      console.warn('[Services] ScrollTrigger initialization failed');
+    });
 
     const ctx = gsap.context(() => {
       // Animación para cada servicio

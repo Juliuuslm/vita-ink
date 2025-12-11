@@ -4,16 +4,21 @@
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ARTISTS } from '../../lib/constants';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Artists() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {
+      console.warn('[Artists] ScrollTrigger initialization failed');
+    });
 
     const ctx = gsap.context(() => {
       // Animación para el header (título y descripción)

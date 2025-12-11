@@ -4,10 +4,7 @@
  */
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Button from '../ui/Button';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,6 +12,14 @@ export default function CTA() {
 
   useEffect(() => {
     if (!sectionRef.current || !strokeContainerRef.current) return;
+
+    // Importar ScrollTrigger dinámicamente para evitar problemas SSR
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.default;
+      gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {
+      console.warn('[CTA] ScrollTrigger initialization failed');
+    });
 
     const ctx = gsap.context(() => {
       // Animación fade-in del título principal "THE BEST"
