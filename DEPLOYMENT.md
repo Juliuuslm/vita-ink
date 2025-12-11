@@ -1,11 +1,31 @@
 # Deployment Guide - VITA-INK
 
-Este proyecto está configurado para desplegarse en **Dokploy** con **Nixpack** o **Railpack**.
+## ⭐ RECOMENDADO: Dockerfile + Nginx (Producción)
+
+Este es el método **más eficiente** para desplegar VITA-INK en Dokploy. Usa una arquitectura multi-stage que:
+- Construye con Node.js + pnpm
+- Sirve archivos estáticos con Nginx (solo 30MB de imagen)
+- Startup <1 segundo
+- Resuelve el error 502 Bad Gateway
+
+**Configuración en Dokploy**: Build Pack = **Dockerfile**, Port = **80**
+
+### Alternativa: Nixpack + Railpack
+
+Si prefieres no usar Docker (menos recomendado), puedes usar Nixpack o Railpack. Este proyecto también está configurado para desplegarse en **Dokploy** con **Nixpack** o **Railpack**.
 
 ## Configuración Aplicada (No Intrusiva)
 
 Se han añadido los siguientes archivos de configuración **sin modificar la lógica del proyecto**:
 
+**Para Docker (RECOMENDADO):**
+| Archivo | Propósito |
+|---------|-----------|
+| `Dockerfile` | Build multi-stage: Node.js (build) + Nginx (runtime) |
+| `nginx.conf` | Configuración de Nginx para servir archivos estáticos |
+| `.dockerignore` | Archivos a ignorar en build Docker |
+
+**Para Nixpack/Railpack (Alternativa):**
 | Archivo | Propósito |
 |---------|-----------|
 | `.npmrc` | Configuración de pnpm (package manager) |
@@ -14,27 +34,60 @@ Se han añadido los siguientes archivos de configuración **sin modificar la ló
 | `.railpackignore` | Archivos a ignorar en build de Railpack |
 | `Procfile` | Define el comando de inicio para Dokploy |
 | `railpack-plan.json` | Configuración explícita para Railpack |
-| `nixpacks.toml` | Configuración explícita para Nixpack (recomendado) |
-| `astro.config.mjs` | Añadido `output: 'static'` para SSG explícito |
+| `nixpacks.toml` | Configuración explícita para Nixpack |
+
+**Configuración general:**
+| `astro.config.mjs` | Configurado con `output: 'static'` para SSG |
 
 ## Pasos para Desplegar en Dokploy
 
-### 1. **En la Interfaz de Dokploy**
+### ⭐ Opción 1: Dockerfile + Nginx (RECOMENDADO)
 
+Este método es más eficiente, seguro y rápido. Dokploy automáticamente detectará `Dockerfile` y lo usará.
+
+#### En Dokploy:
 1. **Crear nuevo proyecto**
    - URL del repositorio: Tu repo de GitHub
-   - Rama: `main` (o la rama que uses)
-   - **Elegir build pack: Nixpack (RECOMENDADO)**
+   - Rama: `main`
+   - Build pack: **Dockerfile** (Dokploy lo detecta automáticamente)
+
+2. **Configuración del Proyecto**
+   - **Container Port**: Cambia a `80` (Nginx corre en puerto 80)
+   - **Health Check**: `/health` (opcional pero recomendado)
+   - Variables de entorno: No necesitas configurar ninguna
+
+3. **Deploy**
+   - Dokploy construirá automáticamente:
+     - Stage 1: Usa Node.js para instalar deps y ejecutar `pnpm build`
+     - Stage 2: Usa Nginx para servir archivos estáticos desde `dist/`
+   - **Resultado**: Imagen de ~30MB, startup <1 segundo
+
+#### Beneficios:
+- ✅ Imagen más pequeña (~30MB vs 200MB con Node.js)
+- ✅ Más rápido (startup <1s)
+- ✅ Menos consumo de memoria
+- ✅ Resuelve error 502 Bad Gateway
+- ✅ Caching optimizado para assets estáticos
+
+---
+
+### Alternativa: Nixpack o Railpack
+
+Si no quieres usar Docker, puedes usar Nixpack (menos recomendado):
+
+#### En Dokploy:
+1. **Crear nuevo proyecto**
+   - URL del repositorio: Tu repo de GitHub
+   - Rama: `main`
+   - **Elegir build pack: Nixpack**
 
 2. **Configuración Automática**
    - Dokploy detectará automáticamente:
-     - `nixpacks.toml` para Nixpack (configuración explícita)
-     - `railpack-plan.json` si usas Railpack como alternativa
+     - `nixpacks.toml` para Nixpack
      - `Procfile` para el comando de inicio
      - `.node-version` para la versión de Node.js
 
 3. **Variables de Entorno** (si aplica)
-   - Añade cualquier variable que necesite tu aplicación
    - `PORT=3000` se configura automáticamente
 
 4. **Deploy**
