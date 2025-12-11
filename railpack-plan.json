@@ -1,0 +1,16 @@
+{
+  "build": {
+    "nixpacks": {
+      "pkgs": ["nodejs", "pnpm"],
+      "apt": []
+    },
+    "commands": [
+      "pnpm install --frozen-lockfile",
+      "pnpm build"
+    ]
+  },
+  "start": {
+    "cmd": "pnpm preview",
+    "port": 3000
+  }
+}
