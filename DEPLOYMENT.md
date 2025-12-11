@@ -9,39 +9,38 @@ Se han añadido los siguientes archivos de configuración **sin modificar la ló
 | Archivo | Propósito |
 |---------|-----------|
 | `.npmrc` | Configuración de pnpm (package manager) |
-| `.node-version` | Especifica Node.js 20.17.0 (Nixpack) |
-| `.nvmrc` | Especifica Node.js 20.17.0 (alternativa) |
+| `.node-version` | Especifica Node.js 20.17.0 (gestores de versión) |
+| `.nvmrc` | Especifica Node.js 20.17.0 (alternativa nvm) |
+| `.railpackignore` | Archivos a ignorar en build de Railpack |
 | `Procfile` | Define el comando de inicio para Dokploy |
+| `railpack-plan.json` | Configuración explícita para Railpack |
+| `nixpacks.toml` | Configuración explícita para Nixpack (recomendado) |
 | `astro.config.mjs` | Añadido `output: 'static'` para SSG explícito |
 
 ## Pasos para Desplegar en Dokploy
 
-### 1. **Preparar el Repositorio**
-```bash
-git add .npmrc .node-version .nvmrc Procfile DEPLOYMENT.md
-git commit -m "chore: add Dokploy deployment configuration"
-git push origin Stryker-UXImprove
-```
-
-### 2. **En la Interfaz de Dokploy**
+### 1. **En la Interfaz de Dokploy**
 
 1. **Crear nuevo proyecto**
    - URL del repositorio: Tu repo de GitHub
-   - Rama: `Stryker-UXImprove` (o la rama que uses)
-   - Elegir build pack: **Nixpack** o **Railpack** (recomendado Nixpack para mejor soporte de Node.js)
+   - Rama: `main` (o la rama que uses)
+   - **Elegir build pack: Nixpack (RECOMENDADO)**
 
-2. **Configuración del Build**
-   - Install command: `pnpm install`
-   - Build command: `pnpm build`
-   - Start command: `pnpm preview` (definido en Procfile, Dokploy lo detectará automáticamente)
+2. **Configuración Automática**
+   - Dokploy detectará automáticamente:
+     - `nixpacks.toml` para Nixpack (configuración explícita)
+     - `railpack-plan.json` si usas Railpack como alternativa
+     - `Procfile` para el comando de inicio
+     - `.node-version` para la versión de Node.js
 
 3. **Variables de Entorno** (si aplica)
    - Añade cualquier variable que necesite tu aplicación
+   - `PORT=3000` se configura automáticamente
 
 4. **Deploy**
-   - Dokploy detectará automáticamente que es un proyecto Node.js/Astro
-   - Usará Nixpack para construir la imagen
-   - Iniciará el servidor con el comando del Procfile
+   - Dokploy construirá la imagen automáticamente
+   - Ejecutará: `pnpm install --frozen-lockfile && pnpm build`
+   - Iniciará con: `pnpm preview` (puerto 3000)
 
 ## ¿Por Qué Esta Configuración?
 
@@ -56,8 +55,24 @@ git push origin Stryker-UXImprove
 
 ### `Procfile`
 - Define el comando que Dokploy ejecutará al iniciar el contenedor
-- `npm run preview`: Ejecuta el servidor de preview de Astro (ligero y eficiente para SSG)
-- Alternativa: usar `npm run build && npm run preview` si necesitas reconstruir en deploy
+- `pnpm preview`: Ejecuta el servidor de preview de Astro (ligero y eficiente para SSG)
+
+### `nixpacks.toml` (Recomendado)
+- Configuración explícita y optimizada para **Nixpack**
+- Define paquetes de sistema necesarios (Node.js 20, pnpm)
+- Especifica comandos de build y start
+- Evita problemas de dependencias y timeouts
+- **Esta es la configuración preferida**
+
+### `railpack-plan.json`
+- Configuración para **Railpack** como alternativa
+- Solo úsalo si prefieres Railpack en lugar de Nixpack
+- Contiene la misma lógica pero para el formato de Railpack
+
+### `.railpackignore`
+- Especifica qué archivos ignorar durante el build de Railpack
+- Reduce el tamaño de la imagen Docker
+- Excluye archivos de desarrollo innecesarios
 
 ### `astro.config.mjs` - `output: 'static'`
 - Indica explícitamente que el proyecto es **Static Site Generation (SSG)**
@@ -105,20 +120,36 @@ Si algo sale mal:
 
 ## Troubleshooting
 
+### Error: "mise install-into caddy failed" (Railpack)
+**Solución**: Usa **Nixpack** en lugar de Railpack. Nixpack no requiere Caddy.
+
+### Error: "Gateway Timeout" en descarga de dependencias
+- Esto puede ocurrir si hay problemas de conectividad
+- Nixpack reintentar automáticamente
+- Si persiste, contacta al proveedor de hosting
+
 ### Error: "pnpm not found"
-- Verifica que `.npmrc` está en la raíz del proyecto
-- Dokploy debería detectar `pnpm-lock.yaml` automáticamente
+- Verifica que `nixpacks.toml` está en la raíz del proyecto
+- Docploy debería detectar `pnpm-lock.yaml` automáticamente
 
 ### Error: "Port already in use"
-- Configura el puerto en Dokploy o en el Procfile: `PORT=3000 npm run preview`
+- El puerto 3000 se configura automáticamente en `nixpacks.toml`
+- Si necesitas otro puerto, edita el archivo y redeploya
 
 ### Build falló
-- Revisa los logs en Dokploy
-- Asegúrate de que `pnpm install && pnpm build` funciona localmente
+- Revisa los logs completos en Dokploy
+- Asegúrate localmente: `pnpm install --frozen-lockfile && pnpm build && pnpm preview`
+- Verifica que `pnpm-lock.yaml` está committed en Git
 
 ### Sitio blanco / No carga contenido
-- Verifica que la carpeta `dist/` fue generada correctamente
+- Verifica que la carpeta `dist/` fue generada: `ls -la dist/`
 - Comprueba que `pnpm preview` funciona localmente
+- Revisa los logs del servidor en Dokploy
+
+### ¿Cómo saber cuál es mi build pack?
+En Dokploy, revisa el log de build. Busca:
+- **Nixpack**: "nixpacks building..." o referencias a `nixpacks.toml`
+- **Railpack**: "railpack building..." (no recomendado)
 
 ---
 

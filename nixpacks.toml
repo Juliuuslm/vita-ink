@@ -1,0 +1,17 @@
+[build]
+# Install Node.js and pnpm
+pkgs = ["nodejs_20", "pnpm"]
+
+# Build commands
+commands = [
+  { run = "pnpm install --frozen-lockfile", description = "install dependencies" },
+  { run = "pnpm build", description = "build astro site" }
+]
+
+[start]
+runImage = "node:20-alpine"
+startCmd = "pnpm preview"
+port = 3000
+
+[variables]
+PORT = "3000"
