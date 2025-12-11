@@ -140,7 +140,7 @@ export default function CTA() {
       </div>
 
       {/* Estilos para texto stroke con marquee vertical */}
-      <style jsx>{`
+      <style>{`
         .stroke-text-item {
           font-size: clamp(4rem, 15vw, 12rem);
           font-weight: 900;
