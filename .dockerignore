@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# Build output (will be generated during build)
+dist/
+.astro/
+
+# Development files
+.git/
+.vscode/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+CLAUDE.md
+PERFORMANCE.md
+DEPLOYMENT.md
+
+# Deployment configs (not needed in image)
+nixpacks.toml
+railpack-plan.json
+Procfile
